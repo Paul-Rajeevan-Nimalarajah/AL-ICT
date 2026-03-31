@@ -81,6 +81,7 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
 .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
 .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.col-span-full { grid-column: 1 / -1; }
 @media (min-width: 768px) {
   .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -89,6 +90,9 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
 @media (min-width: 1024px) {
   .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lg\:col-span-1 { grid-column: span 1 / span 1; }
+  .lg\:col-span-2 { grid-column: span 2 / span 2; }
+  .lg\:col-span-3 { grid-column: span 3 / span 3; }
 }
 .text-center { text-align: center; }
 .mt-4 { margin-top: 1rem; } .mt-8 { margin-top: 2rem; } .mb-4 { margin-bottom: 1rem; } .mb-8 { margin-bottom: 2rem; }
@@ -196,6 +200,7 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
   content: ''; position: absolute; top: -10%; left: 50%; width: 80vw; height: 80vw;
   background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
   opacity: 0.1; transform: translateX(-50%); z-index: -1; border-radius: 50%;
+  pointer-events: none;
 }
 .hero-title { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1.5rem; }
 .hero-subtitle { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem; }
@@ -244,6 +249,8 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
 .ad-banner::after {
   content: ''; position: absolute; right: -5%; bottom: -10%; width: 300px; height: 300px;
   background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* Footer */
@@ -272,3 +279,126 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
 }
 .pdf-download-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+/* Rich PDF Metadata Card */
+.pdf-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  transition: all var(--transition-normal);
+}
+.pdf-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-md);
+}
+.pdf-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+.pdf-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  font-family: var(--font-display);
+}
+.pdf-card-desc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+.pdf-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: var(--bg-color);
+  border-radius: var(--radius-md);
+}
+.pdf-meta-item { display: flex; flex-direction: column; gap: 0.1rem; }
+.pdf-meta-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.pdf-meta-value { font-size: 0.85rem; font-weight: 500; color: var(--text-main); }
+.pdf-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.pdf-tag {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  color: var(--text-muted);
+}
+.pdf-card-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--gradient-primary);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+.pdf-card-download:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+@media (max-width: 768px) {
+  .pdf-card-header { flex-direction: column; }
+  .pdf-card-download { width: 100%; justify-content: center; }
+}
+
+/* Expand / Collapse Accordion */
+.pdf-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+.pdf-toggle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+.pdf-toggle-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+.pdf-toggle-btn .toggle-icon {
+  transition: transform 0.3s ease;
+}
+.pdf-toggle-btn[aria-expanded="true"] .toggle-icon {
+  transform: rotate(180deg);
+}
+.pdf-card-body {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+  padding-top: 0;
+}
+.pdf-card-body.expanded {
+  max-height: 600px;
+  opacity: 1;
+  padding-top: 0.75rem;
+}
+@media (max-width: 768px) {
+  .pdf-card-actions { flex-direction: row; width: 100%; }
+  .pdf-card-download { flex: 1; justify-content: center; }
+}

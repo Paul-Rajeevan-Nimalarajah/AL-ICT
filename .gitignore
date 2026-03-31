@@ -1,0 +1,40 @@
+# .gitignore for AL ICT Notes Hub
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Android App Build & Config
+/android-app/build/
+/android-app/app/build/
+/android-app/.gradle/
+/android-app/local.properties
+/android-app/.idea/
+/android-app/*.iml
+/android-app/app/*.iml
+*.apk
+*.aab
+*.aar
+*.jks
+*.keystore
+release/
+
+# Web dependencies
+/website/node_modules/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp

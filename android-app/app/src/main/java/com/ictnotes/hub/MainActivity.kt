@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     // Default GitHub Pages URL placeholder
     // Replace with ACTUAL GitHub pages URL e.g., "https://yourusername.github.io/ict-notes/"
-    private val TARGET_URL = "https://example.github.io/ict-notes/"
+    private val TARGET_URL = "https://alict.paulrajeevan.com"
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {

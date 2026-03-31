@@ -18,6 +18,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
+  /* =========================================================
+     PDF Card Expand / Collapse Toggle
+  ========================================================= */
+  document.querySelectorAll('.pdf-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const body = document.getElementById(targetId);
+      if (!body) return;
+
+      const isExpanded = body.classList.contains('expanded');
+
+      body.classList.toggle('expanded');
+      btn.setAttribute('aria-expanded', String(!isExpanded));
+      btn.setAttribute('aria-label', isExpanded ? 'Show details' : 'Hide details');
+    });
+  });
+
 
   /* =========================================================
      Service Worker Registration for PWA / Offline usage
