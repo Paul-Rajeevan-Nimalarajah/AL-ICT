@@ -133,11 +133,21 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
   background-color: var(--surface);
   color: var(--text-main);
   border: 1px solid var(--border-color);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: all var(--transition-fast);
 }
 .btn-secondary:hover {
-  background-color: var(--surface-hover);
+  background-color: var(--bg-color);
+  border-color: var(--secondary);
+  color: var(--secondary);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
 }
 
 /* Glass Header */
