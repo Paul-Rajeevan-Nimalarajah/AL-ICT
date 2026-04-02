@@ -302,7 +302,7 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
   background-color: var(--surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
-  padding: 1.5rem;
+  padding: 2.25rem;
   transition: all var(--transition-normal);
 }
 .pdf-card:hover {
@@ -313,32 +313,39 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.75rem;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 .pdf-card-title {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-main);
   font-family: var(--font-display);
 }
 .pdf-card-desc {
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   line-height: 1.6;
 }
 .pdf-meta-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 0.5rem 1rem;
-  margin-bottom: 1rem;
-  padding: 0.75rem;
+  gap: 0.75rem 1.25rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
   background-color: var(--bg-color);
   border-radius: var(--radius-md);
 }
-.pdf-meta-item { display: flex; flex-direction: column; gap: 0.1rem; }
-.pdf-meta-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.pdf-meta-item { display: flex; flex-direction: column; gap: 0.25rem; }
+.pdf-meta-label { 
+  font-size: 0.75rem; 
+  font-weight: 700; 
+  color: var(--text-muted); 
+  text-transform: uppercase; 
+  letter-spacing: 0.075em;
+  margin-bottom: 0.25rem;
+}
 .pdf-meta-value { font-size: 0.85rem; font-weight: 500; color: var(--text-main); }
 .pdf-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .pdf-tag {
