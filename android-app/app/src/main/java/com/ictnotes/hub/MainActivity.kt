@@ -76,6 +76,36 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        // Handle file downloads
+        webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, _ ->
+            try {
+                val request = android.app.DownloadManager.Request(android.net.Uri.parse(url))
+                request.setMimeType(mimetype)
+                request.addRequestHeader("User-Agent", userAgent)
+                
+                // Set cookies if available
+                val cookies = android.webkit.CookieManager.getInstance().getCookie(url)
+                if (cookies != null) {
+                    request.addRequestHeader("cookie", cookies)
+                }
+                
+                request.setDescription("Downloading file...")
+                val fileName = android.webkit.URLUtil.guessFileName(url, contentDisposition, mimetype)
+                request.setTitle(fileName)
+                
+                // Show notification during and after download
+                request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                request.setDestinationInExternalPublicDir(android.os.Environment.DIRECTORY_DOWNLOADS, fileName)
+                
+                val dm = getSystemService(android.content.Context.DOWNLOAD_SERVICE) as android.app.DownloadManager
+                dm.enqueue(request)
+                
+                android.widget.Toast.makeText(applicationContext, "Downloading File: $fileName", android.widget.Toast.LENGTH_LONG).show()
+            } catch (e: Exception) {
+                android.widget.Toast.makeText(applicationContext, "Error downloading file", android.widget.Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     // Handle physical hardware back button to navigate WebView history 
