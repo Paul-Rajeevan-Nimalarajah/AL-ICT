@@ -33,6 +33,7 @@
         <a href="/past-papers" class="nav-link">Past Papers</a>
         <a href="/model-papers" class="nav-link active">Model Papers</a>
         <a href="/tuition" class="nav-link">Tuition</a>
+        <a href="/online-ide" class="nav-link">Online IDE</a>
         <a href="/about" class="nav-link">About</a>
         <a href="/contact" class="nav-link">Contact</a>
       </nav>
@@ -56,25 +57,19 @@
       <div class="grid grid-cols-1 gap-6 max-w-3xl mx-auto">
       <!-- 2025 MoraExams Model Paper Archive -->
       <article class="pdf-card" style="margin-bottom: 24px;">
-        <div class="flex flex-col gap-5">
-          <div class="flex items-center justify-between section-toggle" data-target="mora-year-2025-wrapper" style="cursor: pointer;">
-            <div class="flex items-center gap-6">
-              <div style="background: var(--gradient-primary); color: white; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: var(--font-display); font-size: 1.1rem; flex-shrink: 0;">
-                2025
-              </div>
-              <div>
-                <h3 class="pdf-card-title">2025 MoraExams Model</h3>
-                <p class="pdf-card-desc" style="margin-bottom: 0;">ICT Model Examination</p>
-              </div>
-            </div>
-            <button class="pdf-toggle-btn" aria-expanded="false" aria-label="Show section">
-              <i class="fa-solid fa-chevron-down toggle-icon"></i>
-            </button>
+        <div class="flex items-center gap-6 section-toggle" data-target="mora-year-2025-wrapper" style="cursor:pointer;">
+          <div style="background: var(--gradient-primary); color: white; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: var(--font-display); font-size: 1.1rem; flex-shrink: 0;">
+            2025
           </div>
-          
-          <div class="section-collapse-wrapper collapsed" id="mora-year-2025-wrapper">
-            <div class="section-collapse-inner">
-              <div class="flex flex-col gap-3">
+          <div style="flex:1;">
+            <h3 class="pdf-card-title">2025 MoraExams Model</h3>
+            <p class="pdf-card-desc" style="margin-bottom: 0;">ICT Model Examination</p>
+          </div>
+          <button class="pdf-toggle-btn" aria-expanded="false" aria-label="Show section"><i class="fa-solid fa-chevron-down toggle-icon"></i></button>
+        </div>
+        <div class="section-collapse-wrapper collapsed" id="mora-year-2025-wrapper">
+          <div class="section-collapse-inner">
+            <div class="flex flex-col gap-3">
                 <div class="flex flex-col gap-2">
                   <span class="pdf-meta-label">1. Examination Paper</span>
                   <a href="https://drive.google.com/uc?export=download&id=1Qk_szPh5GDwVVizCouBMvpIXz1PUf8FR" class="pdf-card-download" target="_blank" rel="noopener noreferrer" style="width: 100%; justify-content: center;">

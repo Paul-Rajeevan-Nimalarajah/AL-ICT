@@ -1,3 +1,28 @@
+  /* =========================================================
+     Section Expand / Collapse (Accordion for Units/Years)
+  ========================================================= */
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.section-toggle').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const targetId = toggle.getAttribute('data-target');
+        const wrapper = document.getElementById(targetId);
+        if (!wrapper) return;
+        const expanded = !wrapper.classList.contains('collapsed');
+        document.querySelectorAll('.section-collapse-wrapper').forEach(w => {
+          if (w !== wrapper) w.classList.add('collapsed');
+        });
+        wrapper.classList.toggle('collapsed');
+        // Update button icon and aria
+        const btn = toggle.querySelector('.pdf-toggle-btn');
+        if (btn) {
+          btn.setAttribute('aria-expanded', String(!expanded));
+          btn.setAttribute('aria-label', expanded ? 'Show section' : 'Hide section');
+          const icon = btn.querySelector('.toggle-icon');
+          if (icon) icon.style.transform = expanded ? '' : 'rotate(180deg)';
+        }
+      });
+    });
+  });
 // A/L ICT Tamil Medium Notes Hub - Main JavaScript File
 
 document.addEventListener('DOMContentLoaded', () => {

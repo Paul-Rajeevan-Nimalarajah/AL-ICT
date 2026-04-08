@@ -1,3 +1,17 @@
+/* Accordion Section Expand/Collapse */
+.section-collapse-wrapper {
+  max-height: 2000px;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s;
+  opacity: 1;
+  margin-bottom: 1.5rem;
+}
+.section-collapse-wrapper.collapsed {
+  max-height: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+  margin-bottom: 0;
+}
 /* 
   A/L ICT Tamil Medium Notes Hub
   Premium Design System

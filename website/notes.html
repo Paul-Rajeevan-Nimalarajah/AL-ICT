@@ -36,6 +36,7 @@
         <a href="/past-papers" class="nav-link">Past Papers</a>
         <a href="/model-papers" class="nav-link">Model Papers</a>
         <a href="/tuition" class="nav-link">Tuition</a>
+        <a href="/online-ide" class="nav-link">Online IDE</a>
         <a href="/about" class="nav-link">About</a>
         <a href="/contact" class="nav-link">Contact</a>
       </nav>
@@ -50,17 +51,19 @@
 
       <!-- Unit 5: Operating System -->
       <article class="card">
-        <div class="flex items-center gap-4 mb-6">
+        <div class="flex items-center gap-4 mb-6 section-toggle" data-target="unit5-wrapper" style="cursor:pointer;">
           <div class="card-icon" style="background: var(--gradient-primary); flex-shrink: 0;">
             <i class="fa-solid fa-desktop"></i>
           </div>
-          <div>
+          <div style="flex:1;">
             <h2 style="font-size: 1.25rem; margin-bottom: 0.25rem;">Unit 5 &ndash; Operating System</h2>
             <span class="contributor-badge"><i class="fa-solid fa-circle-check" style="color: var(--primary);"></i> &nbsp;Verified &bull; By Paul Rajeevan</span>
           </div>
+          <button class="pdf-toggle-btn" aria-expanded="false" aria-label="Show section"><i class="fa-solid fa-chevron-down toggle-icon"></i></button>
         </div>
 
-        <div class="pdf-list">
+        <div class="section-collapse-wrapper collapsed" id="unit5-wrapper">
+          <div class="pdf-list">
 
           <!-- Rich Card: Note 1 -->
           <div class="pdf-card">
@@ -194,17 +197,19 @@
 
       <!-- Unit 8: Database Management -->
       <article class="card">
-        <div class="flex items-center gap-4 mb-6">
+        <div class="flex items-center gap-4 mb-6 section-toggle" data-target="unit8-wrapper" style="cursor:pointer;">
           <div class="card-icon" style="background: var(--gradient-primary); flex-shrink: 0;">
             <i class="fa-solid fa-database"></i>
           </div>
-          <div>
+          <div style="flex:1;">
             <h2 style="font-size: 1.25rem; margin-bottom: 0.25rem;">Unit 8 &ndash; Database Management</h2>
             <span class="contributor-badge"><i class="fa-solid fa-circle-check" style="color: var(--primary);"></i> &nbsp;Verified &bull; By Paul Rajeevan</span>
           </div>
+          <button class="pdf-toggle-btn" aria-expanded="false" aria-label="Show section"><i class="fa-solid fa-chevron-down toggle-icon"></i></button>
         </div>
 
-        <div class="pdf-list">
+        <div class="section-collapse-wrapper collapsed" id="unit8-wrapper">
+          <div class="pdf-list">
 
           <!-- Rich Card: Note 1 -->
           <div class="pdf-card">
@@ -341,20 +346,22 @@
 
       <!-- e-Kalvi Notes Section -->
       <article class="card">
-        <div class="flex items-center gap-4 mb-6">
+        <div class="flex items-center gap-4 mb-6 section-toggle" data-target="ekalvi-notes-wrapper" style="cursor:pointer;">
           <div class="card-icon" style="background: linear-gradient(135deg, #0ea5e9, #6366f1); flex-shrink: 0;">
             <i class="fa-solid fa-book-open"></i>
           </div>
-          <div>
+          <div style="flex:1;">
             <h2 style="font-size: 1.25rem; margin-bottom: 0.25rem;">Topic-wise Notes – e-Kalvi Collection</h2>
             <span class="contributor-badge">
               <i class="fa-solid fa-circle-check" style="color: var(--primary);"></i>
               &nbsp;Source: <a href="https://e-kalvi.com/gce-al-ict-notes-in-tamil/" target="_blank" rel="noopener" style="color: var(--primary); text-decoration: underline;">e-kalvi.com</a>
             </span>
           </div>
+          <button class="pdf-toggle-btn" aria-expanded="false" aria-label="Show section"><i class="fa-solid fa-chevron-down toggle-icon"></i></button>
         </div>
 
-        <div class="pdf-list">
+        <div class="section-collapse-wrapper collapsed" id="ekalvi-notes-wrapper">
+          <div class="pdf-list">
 
           <!-- Python -->
           <div class="pdf-card">
@@ -524,6 +531,7 @@
             </div>
           </div>
 
+          </div>
         </div>
       </article>
 
