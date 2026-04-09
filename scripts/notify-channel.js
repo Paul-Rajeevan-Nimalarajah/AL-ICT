@@ -13,7 +13,7 @@ const sendNotification = async (material, category) => {
   const websiteUrl = 'https://alict.paulrajeevan.com';
   const urlLink = material.href.startsWith('http') ? material.href : `${websiteUrl}/${material.href.replace(/^\//, '')}`;
   
-  const message = `🎉 *New Study Material Added!*\n\n*Category:* ${category}\n*Title:* ${material.title}\n\n👉 [Click here to view/download](${urlLink})`;
+  const message = `🎉 *New Study Material Added!*\n\n*Category:* ${category}\n*Title:* ${material.title}\n\n👉 [Click here to view/download](${urlLink})\n\n— Posted via @alictnoteshub_bot 🤖`;
   
   const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
   

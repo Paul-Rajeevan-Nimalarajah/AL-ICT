@@ -103,7 +103,8 @@ bot.command('broadcast_channel', async (ctx) => {
   if (!message) return ctx.reply('Usage: `/broadcast_channel Your message`');
 
   try {
-    await bot.telegram.sendMessage(CHANNEL_USERNAME, message, { parse_mode: 'Markdown' });
+    const signature = '\n\n— Posted via @alictnoteshubbot 🤖';
+    await bot.telegram.sendMessage(CHANNEL_USERNAME, message + signature, { parse_mode: 'Markdown' });
     ctx.reply('✅ Message sent to channel.');
   } catch (e) {
     ctx.reply(`❌ Failed to send: ${e.message}`);
@@ -155,7 +156,11 @@ bot.action('post_channel', async (ctx) => {
   if (!msg) return ctx.editMessageText('❌ Original media not found.');
 
   try {
-    await bot.telegram.copyMessage(CHANNEL_USERNAME, ctx.chat.id, msg.message_id);
+    const signature = '\n\n— Posted via @alictnoteshub_bot 🤖';
+    await bot.telegram.copyMessage(CHANNEL_USERNAME, ctx.chat.id, msg.message_id, {
+      caption: (msg.caption || '') + signature,
+      parse_mode: 'Markdown'
+    });
     ctx.editMessageText('✅ Successfully posted to channel.');
   } catch (e) {
     ctx.editMessageText(`❌ Failed: ${e.message}`);
