@@ -16,9 +16,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src='https://telegram.org/js/telegram-web-app.js'></script>
 </head>
-<body>
-
-  <!-- Header & Navigation -->
+<!-- Header & Navigation -->
   <header class="header">
     <div class="container flex justify-between items-center">
       <a href="./" class="logo">
@@ -80,6 +78,15 @@
       </a>
       <p class="footer-text">&copy; 2026 AL ICT Notes Hub. Developed by <strong>Paul Rajeevan</strong>. All rights reserved.</p>
       <p class="footer-text mt-4">Made with ❤️ for the Tamil educational community.</p>
+      <!-- Telegram Social Links -->
+      <div class="footer-social">
+        <a href="https://t.me/alictnoteshub" target="_blank" rel="noopener" class="footer-social-link" id="footer-tg-channel">
+          <i class="fa-brands fa-telegram"></i> Telegram Channel
+        </a>
+        <a href="https://t.me/alictnoteshubbot" target="_blank" rel="noopener" class="footer-social-link" id="footer-tg-bot">
+          <i class="fa-solid fa-robot"></i> Telegram Bot
+        </a>
+      </div>
       <p class="footer-text mt-4">
         <a href="/about" style="color: var(--text-muted); text-decoration: underline;">About</a> &middot;
         <a href="/privacy" style="color: var(--text-muted); text-decoration: underline;">Privacy Policy</a> &middot;
@@ -125,11 +132,53 @@
       <i class="fa-solid fa-code"></i>
       <span>Online IDE</span>
     </a>
+    <a href="https://t.me/alictnoteshub" target="_blank" rel="noopener" class="more-item" id="more-tg-channel">
+      <i class="fa-brands fa-telegram"></i>
+      <span>TG Channel</span>
+    </a>
+    <a href="https://t.me/alictnoteshubbot" target="_blank" rel="noopener" class="more-item" id="more-tg-bot">
+      <i class="fa-solid fa-robot"></i>
+      <span>TG Bot</span>
+    </a>
     <a href="/contact" class="more-item">
       <i class="fa-solid fa-envelope"></i>
       <span>Contact</span>
     </a>
   </div>
+
+  <!-- Telegram Floating Action Button -->
+  <div class="tg-fab" id="tg-fab">
+    <div class="tg-fab-menu" id="tg-fab-menu">
+      <a href="https://t.me/alictnoteshub" target="_blank" rel="noopener" class="tg-fab-item" id="fab-tg-channel">
+        <i class="fa-brands fa-telegram"></i> Join Channel
+      </a>
+      <a href="https://t.me/alictnoteshubbot" target="_blank" rel="noopener" class="tg-fab-item" id="fab-tg-bot">
+        <i class="fa-solid fa-robot"></i> Chat with Bot
+      </a>
+    </div>
+    <button class="tg-fab-toggle" id="tg-fab-toggle" aria-label="Open Telegram links" aria-expanded="false">
+      <i class="fa-brands fa-telegram"></i>
+    </button>
+  </div>
+  <script>
+    (function() {
+      var btn = document.getElementById('tg-fab-toggle');
+      var menu = document.getElementById('tg-fab-menu');
+      if (btn && menu) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var open = menu.classList.toggle('show');
+          btn.classList.toggle('open', open);
+          btn.setAttribute('aria-expanded', open);
+        });
+        document.addEventListener('click', function() {
+          menu.classList.remove('show');
+          btn.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
 
