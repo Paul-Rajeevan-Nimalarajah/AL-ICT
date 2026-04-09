@@ -1,38 +1,26 @@
 const { Telegraf, Markup } = require('telegraf');
 const fs = require('fs');
 const path = require('path');
-const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
 // --- Configuration ---
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const websiteUrl = process.env.WEBSITE_URL || 'https://alict.paulrajeevan.com';
-
-// Initialize Supabase
-let supabase = null;
-if (process.env.SUPABASE_URL && process.env.SUPABASE_KEY) {
-  supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-  console.log('📦 Supabase Integrated');
-}
+const USERS_FILE = path.join(__dirname, 'users.json');
 
 // --- Helper Functions ---
 
-// 1. User Tracking
-const saveUser = async (ctx) => {
+// 1. User Tracking (Note: Ephemeral on Vercel)
+const saveUser = (ctx) => {
   try {
     const userId = ctx.from.id;
-    if (supabase) {
-      await supabase.from('users').upsert({ id: userId }, { onConflict: 'id' });
-    } else {
-      const USERS_FILE = path.join(__dirname, 'users.json');
-      let users = [];
-      if (fs.existsSync(USERS_FILE)) {
-        users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
-      }
-      if (!users.includes(userId)) {
-        users.push(userId);
-        fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-      }
+    let users = [];
+    if (fs.existsSync(USERS_FILE)) {
+      users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+    }
+    if (!users.includes(userId)) {
+      users.push(userId);
+      fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
     }
   } catch (e) {
     console.error('Error tracking user:', e.message);
@@ -56,8 +44,8 @@ const getMaterials = async () => {
 // --- Bot Commands ---
 
 // Start command
-bot.start(async (ctx) => {
-  await saveUser(ctx);
+bot.start((ctx) => {
+  saveUser(ctx);
   
   const welcomeMessage = `Welcome to the *AL ICT Hub* 🎓\n\nChoose an option from the menu below to get started.`;
   
@@ -90,23 +78,13 @@ bot.command('broadcast_users', async (ctx) => {
   const message = ctx.message.text.split(' ').slice(1).join(' ').trim();
   if (!message) return ctx.reply('Usage: `/broadcast_users Your message`');
 
-  let userIds = [];
-  if (supabase) {
-    const { data } = await supabase.from('users').select('id');
-    userIds = data ? data.map(u => u.id) : [];
-  } else {
-    const USERS_FILE = path.join(__dirname, 'users.json');
-    if (fs.existsSync(USERS_FILE)) {
-      userIds = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
-    }
-  }
+  if (!fs.existsSync(USERS_FILE)) return ctx.reply('No users found.');
+  const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
 
-  if (userIds.length === 0) return ctx.reply('No users found.');
-
-  ctx.reply(`🚀 Starting broadcast to ${userIds.length} users...`);
+  ctx.reply(`🚀 Starting broadcast to ${users.length} users...`);
   
   let successCount = 0;
-  for (const userId of userIds) {
+  for (const userId of users) {
     try {
       await bot.telegram.sendMessage(userId, message, { parse_mode: 'Markdown' });
       successCount++;
@@ -115,7 +93,7 @@ bot.command('broadcast_users', async (ctx) => {
     }
     await new Promise(r => setTimeout(r, 50)); 
   }
-  ctx.reply(`✅ Broadcast complete. Successfully sent to ${successCount}/${userIds.length} users.`);
+  ctx.reply(`✅ Sent to ${successCount}/${users.length} users.`);
 });
 
 // --- Reply Keyboard Handlers (3-Column Grid) ---

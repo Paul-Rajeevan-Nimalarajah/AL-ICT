@@ -8,7 +8,6 @@
     "dev": "nodemon bot.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.102.1",
     "dotenv": "^16.3.1",
     "telegraf": "^4.15.0"
   }
