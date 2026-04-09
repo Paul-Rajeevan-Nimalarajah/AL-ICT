@@ -20,7 +20,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Colors - Sri Lankan Flag Theme */
+  /* Colors - Sri Lankan Flag Theme (Defaults) */
   --primary: #8D153A;
   --primary-light: #B0234B;
   --primary-dark: #630C26;
@@ -28,13 +28,17 @@
   --accent-gold: #FFBE29;
   --accent-green: #00534E;
   
-  /* Neutral Colors (Light Theme) */
-  --bg-color: hsl(210, 20%, 98%);
-  --surface: hsl(0, 0%, 100%);
-  --surface-hover: hsl(210, 20%, 96%);
-  --text-main: hsl(222, 47%, 11%);
-  --text-muted: hsl(215, 16%, 47%);
-  --border-color: hsl(214, 32%, 91%);
+  /* Telegram Theme Overrides (if available) */
+  --bg-color: var(--tg-theme-bg-color, hsl(210, 20%, 98%));
+  --surface: var(--tg-theme-secondary-bg-color, hsl(0, 0%, 100%));
+  --surface-hover: var(--tg-theme-bg-color, hsl(210, 20%, 96%));
+  --text-main: var(--tg-theme-text-color, hsl(222, 47%, 11%));
+  --text-muted: var(--tg-theme-hint-color, hsl(215, 16%, 47%));
+  --border-color: var(--tg-theme-hint-color, hsl(214, 32%, 91%));
+  
+  /* Override primary/secondary if in Telegram for better contrast */
+  --tg-btn-color: var(--tg-theme-button-color);
+  --tg-btn-text: var(--tg-theme-button-text-color);
   
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);

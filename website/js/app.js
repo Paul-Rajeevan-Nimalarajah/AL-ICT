@@ -62,6 +62,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* =========================================================
+     Telegram Mini App Initialization
+  ========================================================= */
+  const tg = window.Telegram ? window.Telegram.WebApp : null;
+
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    
+    // Set theme colors based on Telegram
+    document.documentElement.style.setProperty('--primary', tg.themeParams.button_color || '#8D153A');
+    
+    // Show back button if not on homepage
+    if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+      tg.BackButton.show();
+      tg.BackButton.onClick(() => {
+        window.history.back();
+      });
+    } else {
+      tg.BackButton.hide();
+    }
+
+    // Haptic feedback helper
+    const impact = (style = 'medium') => {
+      if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred(style);
+    }
+
+    // Add haptics to all buttons
+    document.querySelectorAll('.btn, .pdf-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => impact('light'));
+    });
+  }
+
+  /* =========================================================
      Service Worker Registration for PWA / Offline usage
   ========================================================= */
   if ('serviceWorker' in navigator) {
