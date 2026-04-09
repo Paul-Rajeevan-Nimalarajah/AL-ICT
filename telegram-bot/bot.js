@@ -1,32 +1,41 @@
 const { Telegraf, Markup } = require('telegraf');
 const fs = require('fs');
 const path = require('path');
+const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
-// Initialize the bot with your token
+// --- Configuration ---
 const bot = new Telegraf(process.env.BOT_TOKEN);
+const websiteUrl = process.env.WEBSITE_URL || 'https://alict.paulrajeevan.com';
 
-// Your website URL
-const websiteUrl = 'https://alict.paulrajeevan.com'; 
-const USERS_FILE = path.join(__dirname, 'users.json');
+// Initialize Supabase
+let supabase = null;
+if (process.env.SUPABASE_URL && process.env.SUPABASE_KEY) {
+  supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+  console.log('📦 Supabase Integrated');
+}
 
 // --- Helper Functions ---
 
 // 1. User Tracking
-const saveUser = (ctx) => {
+const saveUser = async (ctx) => {
   try {
     const userId = ctx.from.id;
-    let users = [];
-    if (fs.existsSync(USERS_FILE)) {
-      users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
-    }
-    if (!users.includes(userId)) {
-      users.push(userId);
-      fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-      console.log(`New user registered: ${userId}`);
+    if (supabase) {
+      await supabase.from('users').upsert({ id: userId }, { onConflict: 'id' });
+    } else {
+      const USERS_FILE = path.join(__dirname, 'users.json');
+      let users = [];
+      if (fs.existsSync(USERS_FILE)) {
+        users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+      }
+      if (!users.includes(userId)) {
+        users.push(userId);
+        fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+      }
     }
   } catch (e) {
-    console.error('Error saving user:', e);
+    console.error('Error tracking user:', e.message);
   }
 };
 
@@ -47,8 +56,8 @@ const getMaterials = async () => {
 // --- Bot Commands ---
 
 // Start command
-bot.start((ctx) => {
-  saveUser(ctx);
+bot.start(async (ctx) => {
+  await saveUser(ctx);
   
   const welcomeMessage = `Welcome to the *AL ICT Hub* 🎓\n\nChoose an option from the menu below to get started.`;
   
@@ -81,23 +90,32 @@ bot.command('broadcast_users', async (ctx) => {
   const message = ctx.message.text.split(' ').slice(1).join(' ').trim();
   if (!message) return ctx.reply('Usage: `/broadcast_users Your message`');
 
-  if (!fs.existsSync(USERS_FILE)) return ctx.reply('No users found.');
-  const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+  let userIds = [];
+  if (supabase) {
+    const { data } = await supabase.from('users').select('id');
+    userIds = data ? data.map(u => u.id) : [];
+  } else {
+    const USERS_FILE = path.join(__dirname, 'users.json');
+    if (fs.existsSync(USERS_FILE)) {
+      userIds = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+    }
+  }
 
-  ctx.reply(`🚀 Starting broadcast to ${users.length} users...`);
+  if (userIds.length === 0) return ctx.reply('No users found.');
+
+  ctx.reply(`🚀 Starting broadcast to ${userIds.length} users...`);
   
   let successCount = 0;
-  for (const userId of users) {
+  for (const userId of userIds) {
     try {
       await bot.telegram.sendMessage(userId, message, { parse_mode: 'Markdown' });
       successCount++;
     } catch (e) {
-      console.error(`Failed to send to ${userId}:`, e.message);
+      console.error(`Failed: ${userId}`);
     }
-    // Anti-flood: 30 messages per second limit
     await new Promise(r => setTimeout(r, 50)); 
   }
-  ctx.reply(`✅ Broadcast complete. Successfully sent to ${successCount}/${users.length} users.`);
+  ctx.reply(`✅ Broadcast complete. Successfully sent to ${successCount}/${userIds.length} users.`);
 });
 
 // --- Reply Keyboard Handlers (3-Column Grid) ---
@@ -233,8 +251,10 @@ bot.action('contact_admin', (ctx) => {
 });
 
 // Launch logic
-if (!process.env.VERCEL) {
-  bot.launch().then(() => console.log('🤖 Telegram Bot (NAV MODE) is running...'));
+if (process.env.VERCEL) {
+  console.log('🌐 Webhook mode active');
+} else {
+  bot.launch().then(() => console.log('🤖 Bot is running via Polling...'));
 }
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
