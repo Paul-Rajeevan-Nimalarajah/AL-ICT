@@ -12,12 +12,24 @@ const extractMaterials = (filePath) => {
     if (href && (href.includes('drive.google.com') || href.includes('pdfs/'))) {
       let title = $(el).text().trim();
       if (!title || title.includes('Download') || title.includes('Part')) {
-          // try to find closest title
           const cardTitle = $(el).closest('.pdf-card').find('.pdf-card-title').text().trim();
-          // if title is just "Download Part I", make it more descriptive
           title = cardTitle ? `${cardTitle} - ${title.replace('Download ', '')}` : title;
       }
-      links.push({ title, href });
+
+      // Determine category (Unit or Year)
+      let group = 'Other';
+      const yearMatch = title.match(/(20\d{2})/);
+      const unitMatch = title.match(/Unit\s*(\d+)/i);
+      
+      if (yearMatch) {
+          group = yearMatch[1];
+      } else if (unitMatch) {
+          group = `Unit ${unitMatch[1]}`;
+      } else if (title.toLowerCase().includes('e-kalvi')) {
+          group = 'e-Kalvi';
+      }
+
+      links.push({ title, href, group });
     }
   });
 
@@ -30,10 +42,17 @@ const main = () => {
     fs.mkdirSync(dataDir, { recursive: true });
   }
 
+  const notes = extractMaterials(path.join(__dirname, '../website/notes.html'));
+  const models = extractMaterials(path.join(__dirname, '../website/model-papers.html'));
+  const pastPapers = extractMaterials(path.join(__dirname, '../website/past-papers.html'));
+
   const materials = {
-    notes: extractMaterials(path.join(__dirname, '../website/notes.html')),
-    models: extractMaterials(path.join(__dirname, '../website/model-papers.html')),
-    pastPapers: extractMaterials(path.join(__dirname, '../website/past-papers.html'))
+    notesGroups: [...new Set(notes.map(n => n.group))].sort(),
+    modelsGroups: [...new Set(models.map(m => m.group))].sort().reverse(),
+    pastPapersGroups: [...new Set(pastPapers.map(p => p.group))].sort().reverse(),
+    notes,
+    models,
+    pastPapers
   };
 
   fs.writeFileSync(
@@ -41,7 +60,7 @@ const main = () => {
     JSON.stringify(materials, null, 2)
   );
   
-  console.log('Successfully extracted materials to website/data/materials.json');
+  console.log('Successfully extracted grouped materials to website/data/materials.json');
 };
 
 main();
