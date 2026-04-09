@@ -1,68 +1,39 @@
+// A/L ICT Tamil Medium Notes Hub - Main JavaScript File
+
+document.addEventListener('DOMContentLoaded', () => {
   /* =========================================================
      Section Expand / Collapse (Accordion for Units/Years)
   ========================================================= */
-  document.addEventListener('DOMContentLoaded', () => {
+  const initAccordions = () => {
     document.querySelectorAll('.section-toggle').forEach(toggle => {
       toggle.addEventListener('click', () => {
         const targetId = toggle.getAttribute('data-target');
         const wrapper = document.getElementById(targetId);
         if (!wrapper) return;
-        const expanded = !wrapper.classList.contains('collapsed');
-        document.querySelectorAll('.section-collapse-wrapper').forEach(w => {
-          if (w !== wrapper) w.classList.add('collapsed');
-        });
+        
+        const isCollapsed = wrapper.classList.contains('collapsed');
+        
+        // Optional: Close others
+        // document.querySelectorAll('.section-collapse-wrapper').forEach(w => {
+        //   if (w !== wrapper) w.classList.add('collapsed');
+        // });
+        
         wrapper.classList.toggle('collapsed');
+        
         // Update button icon and aria
         const btn = toggle.querySelector('.pdf-toggle-btn');
         if (btn) {
-          btn.setAttribute('aria-expanded', String(!expanded));
-          btn.setAttribute('aria-label', expanded ? 'Show section' : 'Hide section');
+          btn.setAttribute('aria-expanded', String(isCollapsed));
+          btn.setAttribute('aria-label', isCollapsed ? 'Hide section' : 'Show section');
           const icon = btn.querySelector('.toggle-icon');
-          if (icon) icon.style.transform = expanded ? '' : 'rotate(180deg)';
+          if (icon) icon.style.transform = isCollapsed ? 'rotate(180deg)' : '';
         }
       });
     });
-  });
-// A/L ICT Tamil Medium Notes Hub - Main JavaScript File
-
-document.addEventListener('DOMContentLoaded', () => {
-  /* =========================================================
-     Mobile Navigation Toggle
-  ========================================================= */
-  const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-  const navLinks = document.querySelector('.nav-links');
-
-  if (mobileMenuBtn && navLinks) {
-    mobileMenuBtn.addEventListener('click', () => {
-      const isExpanded = navLinks.classList.contains('show');
-      navLinks.classList.toggle('show');
-      mobileMenuBtn.innerHTML = isExpanded 
-        ? '<i class="fa-solid fa-bars"></i>' 
-        : '<i class="fa-solid fa-xmark"></i>';
-    });
-  }
-
+  };
 
   /* =========================================================
-     PDF Card Expand / Collapse Toggle
-  ========================================================= */
-  document.querySelectorAll('.pdf-toggle-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-target');
-      const body = document.getElementById(targetId);
-      if (!body) return;
-
-      const isExpanded = body.classList.contains('expanded');
-
-      body.classList.toggle('expanded');
-      btn.setAttribute('aria-expanded', String(!isExpanded));
-      btn.setAttribute('aria-label', isExpanded ? 'Show details' : 'Hide details');
-    });
-  });
-
-
-  /* =========================================================
-     Telegram Mini App Initialization
+     Telegram Mini App Initialization & Navigation
   ========================================================= */
   const tg = window.Telegram ? window.Telegram.WebApp : null;
 
@@ -71,11 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
     tg.expand();
     
     // Show back button if not on homepage
-    if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+    const isHome = window.location.pathname === '/' || window.location.pathname.endsWith('index.html');
+    if (!isHome) {
       tg.BackButton.show();
-      tg.BackButton.onClick(() => {
-        window.history.back();
-      });
+      tg.BackButton.onClick(() => window.history.back());
     } else {
       tg.BackButton.hide();
     }
@@ -99,34 +69,34 @@ document.addEventListener('DOMContentLoaded', () => {
       '/contact.html': 'nav-contact'
     };
     
-    const activeId = navItems[path];
-    if (activeId) {
-      const activeEl = document.getElementById(activeId);
-      if (activeEl) activeEl.classList.add('active');
-    }
+    // Highlight active tab
+    Object.keys(navItems).forEach(key => {
+      if (path === key || path.endsWith(key)) {
+        const el = document.getElementById(navItems[key]);
+        if (el) el.classList.add('active');
+      }
+    });
 
     // Haptic feedback helper
-    const impact = (style = 'medium') => {
+    const impact = (style = 'light') => {
       if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred(style);
     }
 
-    // Add haptics to all buttons and nav items
-    document.querySelectorAll('.btn, .pdf-toggle-btn, .nav-item').forEach(btn => {
-      btn.addEventListener('click', () => impact('light'));
+    // Attach listeners
+    document.querySelectorAll('.btn, .pdf-toggle-btn, .nav-item, .section-toggle').forEach(el => {
+      el.addEventListener('click', () => impact('light'));
     });
   }
 
+  // Initialize
+  initAccordions();
+
   /* =========================================================
-     Service Worker Registration for PWA / Offline usage
+     Service Worker Registration (PWA)
   ========================================================= */
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(registration => {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, err => {
-          console.log('ServiceWorker registration failed: ', err);
-        });
+      navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW failed:', err));
     });
   }
 });
