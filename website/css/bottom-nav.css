@@ -33,7 +33,7 @@ body {
     position: fixed;
     bottom: 100px;
     left: 50%;
-    transform: translateX(50px); /* Align with More button on desktop */
+    transform: translateX(100px); /* Precisely centers above the More button in the 500px container */
     width: 200px;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
