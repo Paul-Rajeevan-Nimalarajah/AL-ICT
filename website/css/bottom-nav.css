@@ -32,7 +32,8 @@ body {
 .more-menu {
     position: fixed;
     bottom: 100px;
-    right: 20px;
+    left: 50%;
+    transform: translateX(50px); /* Align with More button on desktop */
     width: 200px;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
@@ -44,8 +45,16 @@ body {
     flex-direction: column;
     overflow: hidden;
     z-index: 10000;
-    transform-origin: bottom right;
+    transform-origin: bottom center;
     animation: slideUpFade 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 500px) {
+    .more-menu {
+        left: auto;
+        right: 15px;
+        transform: none;
+    }
 }
 
 .more-menu.show {
