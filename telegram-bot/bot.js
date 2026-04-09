@@ -49,21 +49,22 @@ bot.start(async (ctx) => {
   
   const welcomeMessage = `Welcome to the *AL ICT Hub* 🎓\n\nChoose an option from the menu below to get started.`;
   
-  // Dense 3-Column Grid Keyboard
-  const mainKeyboard = Markup.keyboard([
-    ['📚 Notes', '📄 Models', '📝 Past'],
-    ['💻 Online IDE', '📱 Mobile App', '💼 About Us'],
-    ['🌐 Visit Our Website', '📢 Join Our Telegram Channel', '📞 Contact']
-  ]).resize();
-  // Inline App Button
-  const appMenu = Markup.inlineKeyboard([
-    [Markup.button.webApp('📱 Open Full Hub App', websiteUrl)]
+  // Combined Inline Menu for all features
+  const mainMenu = Markup.inlineKeyboard([
+    [Markup.button.callback('📚 Unit Notes', 'menu_notes')],
+    [Markup.button.callback('📄 Model Papers', 'menu_models')],
+    [Markup.button.callback('📝 Past Papers', 'menu_past')],
+    [Markup.button.webApp('📱 Open Full Hub App', websiteUrl)],
+    [
+      Markup.button.url('🌐 Website', websiteUrl),
+      Markup.button.url('📢 Channel', 'https://t.me/alictnoteshub')
+    ],
+    [Markup.button.url('💻 Online IDE', `${websiteUrl}/online-ide.html`)]
   ]);
 
-  await ctx.replyWithMarkdown(welcomeMessage, mainKeyboard);
-
-  // Send the app button as a separate follow-up
-  await ctx.reply('🚀 Launch the full App experience:', appMenu);
+  // Use removeKeyboard() to clear the grid for existing users
+  await ctx.replyWithMarkdown(welcomeMessage, Markup.removeKeyboard());
+  await ctx.reply('🚀 Hub Navigation:', mainMenu);
 });
 
 // Broadcast to Users
@@ -92,42 +93,11 @@ bot.command('broadcast_users', async (ctx) => {
   ctx.reply(`✅ Sent to ${successCount}/${users.length} users.`);
 });
 
-// --- Reply Keyboard Handlers (3-Column Grid) ---
+// --- Text Shortcuts ---
+bot.hears('📚 Notes', (ctx) => ctx.reply('Redirecting to Notes...', Markup.inlineKeyboard([[Markup.button.callback('📂 Select Unit', 'menu_notes')]])));
+bot.hears('📄 Models', (ctx) => ctx.reply('Redirecting to Models...', Markup.inlineKeyboard([[Markup.button.callback('📂 Select Year', 'menu_models')]])));
+bot.hears('📝 Past', (ctx) => ctx.reply('Redirecting to Past Papers...', Markup.inlineKeyboard([[Markup.button.callback('📂 Select Year', 'menu_past')]])));
 
-bot.hears('📚 Notes', (ctx) => ctx.reply('📚 Unit Notes Categories:', Markup.inlineKeyboard([
-  [Markup.button.callback('📂 Select Unit/Category', 'menu_notes')],
-  [Markup.button.callback('⬅️ Back', 'main_menu')]
-])));
-
-bot.hears('📄 Models', (ctx) => ctx.reply('📄 Model Papers Categories:', Markup.inlineKeyboard([
-  [Markup.button.callback('📂 Select Year', 'menu_models')],
-  [Markup.button.callback('⬅️ Back', 'main_menu')]
-])));
-
-bot.hears('📝 Past', (ctx) => ctx.reply('📝 Past Papers Categories:', Markup.inlineKeyboard([
-  [Markup.button.callback('📂 Select Year', 'menu_past')],
-  [Markup.button.callback('⬅️ Back', 'main_menu')]
-])));
-
-bot.hears('📱 Mobile App', (ctx) => ctx.reply('Launch the full website experience inside Telegram:', Markup.inlineKeyboard([
-    [Markup.button.webApp('📱 Open Hub App', websiteUrl)]
-])));
-
-bot.hears('🌐 Visit Our Website', (ctx) => ctx.reply(`Visit our website: ${websiteUrl}`));
-
-bot.hears('💻 Online IDE', (ctx) => ctx.reply('Practice coding with our online IDE:', Markup.inlineKeyboard([
-    [Markup.button.url('💻 Open Online IDE', `${websiteUrl}/online-ide.html`)]
-])));
-
-bot.hears('📢 Join Our Telegram Channel', (ctx) => ctx.reply('Join our official updates channel for the latest notes and model papers!', Markup.inlineKeyboard([
-    [Markup.button.url('📢 Join Channel', 'https://t.me/al_ict_notes_testing')] 
-])));
-
-bot.hears('📞 Contact', (ctx) => ctx.reply('Need help? Visit our contact page or message the admin.', Markup.inlineKeyboard([
-    [Markup.button.url('🌐 Contact Page', `${websiteUrl}/contact.html`)]
-])));
-
-bot.hears('💼 About Us', (ctx) => ctx.reply('AL ICT Notes Hub is a dedicated platform for Tamil Medium students. Visit our site to learn more!'));
 
 // --- Navigation Handlers ---
 
