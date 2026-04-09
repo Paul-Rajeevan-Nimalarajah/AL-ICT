@@ -53,8 +53,56 @@ class MainActivity : AppCompatActivity() {
         settings.useWideViewPort = true
         settings.loadWithOverviewMode = true
 
-        // Ensure links stay within the App WebView, not jumping to Chrome app
+        // Use WebClient to handle loading rules
         webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, request: android.webkit.WebResourceRequest?): Boolean {
+                val url = request?.url ?: return false
+                val scheme = url.scheme ?: ""
+                val host = url.host ?: ""
+                
+                // Let WebView handle our own domain
+                if ((scheme == "http" || scheme == "https") && host.endsWith("alict.paulrajeevan.com")) {
+                    return false
+                }
+                
+                // Also let WebView handle data: and blob: URLs if needed
+                if (scheme == "data" || scheme == "blob") {
+                    return false
+                }
+                
+                // Everything else (external domains, mailto, tel, tg, etc.) goes to external apps
+                return try {
+                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, url)
+                    startActivity(intent)
+                    true
+                } catch (e: Exception) {
+                    false
+                }
+            }
+
+            @Deprecated("Deprecated in Java", ReplaceWith("shouldOverrideUrlLoading(view, request)"))
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                if (url == null) return false
+                val uri = android.net.Uri.parse(url)
+                val scheme = uri.scheme ?: ""
+                val host = uri.host ?: ""
+                
+                if ((scheme == "http" || scheme == "https") && host.endsWith("alict.paulrajeevan.com")) {
+                    return false
+                }
+                if (scheme == "data" || scheme == "blob") {
+                    return false
+                }
+                
+                return try {
+                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                    true
+                } catch (e: Exception) {
+                    false
+                }
+            }
+
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 progressBar.visibility = View.VISIBLE
