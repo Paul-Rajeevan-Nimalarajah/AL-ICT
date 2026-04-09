@@ -70,9 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tg.ready();
     tg.expand();
     
-    // Set theme colors based on Telegram
-    document.documentElement.style.setProperty('--primary', tg.themeParams.button_color || '#8D153A');
-    
     // Show back button if not on homepage
     if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
       tg.BackButton.show();
