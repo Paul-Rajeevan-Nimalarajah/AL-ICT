@@ -1,0 +1,26 @@
+{
+  "name": "al-ict-tamil-medium-notes-hub",
+  "version": "1.0.0",
+  "description": "**AL ICT Notes Hub** is a comprehensive educational resource platform dedicated to G.C.E. Advanced Level ICT students in the Tamil Medium.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Paul-Rajeevan-Nimalarajah/AL-ICT.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Paul-Rajeevan-Nimalarajah/AL-ICT/issues"
+  },
+  "homepage": "https://github.com/Paul-Rajeevan-Nimalarajah/AL-ICT#readme",
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "dotenv": "^17.4.1",
+    "node-fetch": "^3.3.2"
+  }
+}

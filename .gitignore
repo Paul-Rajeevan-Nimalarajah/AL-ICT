@@ -20,9 +20,13 @@
 *.keystore
 release/
 
-# Web dependencies
+# Web & Node dependencies
 /website/node_modules/
+/node_modules/
+/telegram-bot/node_modules/
 
+# GitHub Actions Cache
+.old_cache/
 # OS generated files
 .DS_Store
 .DS_Store?
@@ -38,6 +42,7 @@ Thumbs.db
 *.swp
 *.swo
 *.tmp
+tmp/
 
 # Python artifacts
 __pycache__/

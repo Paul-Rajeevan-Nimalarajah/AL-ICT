@@ -1,0 +1,14 @@
+{
+  "name": "al-ict-hub-telegram-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot for AL ICT Tamil Medium Notes Hub",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "telegraf": "^4.15.0"
+  }
+}
