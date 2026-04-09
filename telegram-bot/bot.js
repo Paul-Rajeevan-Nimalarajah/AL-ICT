@@ -7,6 +7,8 @@ require('dotenv').config();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const websiteUrl = process.env.WEBSITE_URL || 'https://alict.paulrajeevan.com';
 const USERS_FILE = path.join(__dirname, 'users.json');
+const CHANNEL_USERNAME = process.env.CHANNEL_USERNAME || '@alictnoteshub';
+const ADMIN_ID = process.env.ADMIN_ID;
 
 // --- Helper Functions ---
 
@@ -25,6 +27,10 @@ const saveUser = (ctx) => {
   } catch (e) {
     console.error('Error tracking user:', e.message);
   }
+};
+
+const isAdmin = (ctx) => {
+  return ADMIN_ID && ctx.from.id.toString() === ADMIN_ID;
 };
 
 // 2. Data Loader
@@ -66,8 +72,7 @@ bot.start(async (ctx) => {
 
 // Broadcast to Users
 bot.command('broadcast_users', async (ctx) => {
-  const adminId = process.env.ADMIN_ID;
-  if (!adminId || ctx.from.id.toString() !== adminId) return ctx.reply('⛔ Unauthorized.');
+  if (!isAdmin(ctx)) return ctx.reply('⛔ Unauthorized.');
 
   const message = ctx.message.text.split(' ').slice(1).join(' ').trim();
   if (!message) return ctx.reply('Usage: `/broadcast_users Your message`');
@@ -90,6 +95,37 @@ bot.command('broadcast_users', async (ctx) => {
   ctx.reply(`✅ Sent to ${successCount}/${users.length} users.`);
 });
 
+// Broadcast to Channel
+bot.command('broadcast_channel', async (ctx) => {
+  if (!isAdmin(ctx)) return ctx.reply('⛔ Unauthorized.');
+
+  const message = ctx.message.text.split(' ').slice(1).join(' ').trim();
+  if (!message) return ctx.reply('Usage: `/broadcast_channel Your message`');
+
+  try {
+    await bot.telegram.sendMessage(CHANNEL_USERNAME, message, { parse_mode: 'Markdown' });
+    ctx.reply('✅ Message sent to channel.');
+  } catch (e) {
+    ctx.reply(`❌ Failed to send: ${e.message}`);
+  }
+});
+
+// Handle Media from Admin
+bot.on(['photo', 'video', 'document'], async (ctx) => {
+  if (!isAdmin(ctx)) return;
+
+  const menu = Markup.inlineKeyboard([
+    [Markup.button.callback('📢 Post to Channel', 'post_channel')],
+    [Markup.button.callback('👥 Broadcast to All Users', 'post_users')],
+    [Markup.button.callback('❌ Cancel', 'cancel_post')]
+  ]);
+
+  await ctx.reply('📂 *Media Received.*\nWhere would you like to send this?', {
+    parse_mode: 'Markdown',
+    ...menu
+  });
+});
+
 // --- Action Handlers ---
 
 bot.action('main_menu', async (ctx) => {
@@ -109,6 +145,49 @@ bot.action('main_menu', async (ctx) => {
 bot.action('contact_admin', (ctx) => {
   ctx.answerCbQuery();
   ctx.reply('To directly reach out, visit: https://alict.paulrajeevan.com/contact.html or message the admin.');
+});
+
+// Media Action Handlers
+bot.action('post_channel', async (ctx) => {
+  if (!isAdmin(ctx)) return ctx.answerCbQuery('⛔ Unauthorized.');
+  
+  const msg = ctx.callbackQuery.message.reply_to_message;
+  if (!msg) return ctx.editMessageText('❌ Original media not found.');
+
+  try {
+    await bot.telegram.copyMessage(CHANNEL_USERNAME, ctx.chat.id, msg.message_id);
+    ctx.editMessageText('✅ Successfully posted to channel.');
+  } catch (e) {
+    ctx.editMessageText(`❌ Failed: ${e.message}`);
+  }
+});
+
+bot.action('post_users', async (ctx) => {
+  if (!isAdmin(ctx)) return ctx.answerCbQuery('⛔ Unauthorized.');
+
+  const msg = ctx.callbackQuery.message.reply_to_message;
+  if (!msg) return ctx.editMessageText('❌ Original media not found.');
+
+  if (!fs.existsSync(USERS_FILE)) return ctx.editMessageText('❌ No users found.');
+  const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+
+  ctx.editMessageText(`🚀 Broadcasting media to ${users.length} users...`);
+
+  let successCount = 0;
+  for (const userId of users) {
+    try {
+      await bot.telegram.copyMessage(userId, ctx.chat.id, msg.message_id);
+      successCount++;
+    } catch (e) {
+      console.error(`Failed: ${userId}`);
+    }
+    await new Promise(r => setTimeout(r, 50));
+  }
+  ctx.reply(`✅ Media broadcast complete: ${successCount}/${users.length} users.`);
+});
+
+bot.action('cancel_post', (ctx) => {
+  ctx.editMessageText('❌ Post cancelled.');
 });
 
 
