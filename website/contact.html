@@ -144,6 +144,7 @@
 
   <script src="js/app.js"></script>
   
+  
   <!-- Bottom Navigation Shortcuts -->
   <nav class="bottom-nav">
     <a href="./" class="nav-item" id="nav-home">
@@ -162,19 +163,28 @@
       <i class="fa-solid fa-file-pen"></i>
       <span>Models</span>
     </a>
-    <a href="/tuition" class="nav-item" id="nav-tuition">
+    <a href="#" class="nav-item" id="nav-more">
+      <i class="fa-solid fa-ellipsis"></i>
+      <span>More</span>
+    </a>
+  </nav>
+
+  <!-- More Menu Popover -->
+  <div class="more-menu" id="more-menu-overlay">
+    <a href="/tuition" class="more-item">
       <i class="fa-solid fa-chalkboard-user"></i>
       <span>Tuition</span>
     </a>
-    <a href="/online-ide" class="nav-item" id="nav-ide">
+    <a href="/online-ide" class="more-item">
       <i class="fa-solid fa-code"></i>
-      <span>IDE</span>
+      <span>Online IDE</span>
     </a>
-    <a href="/contact" class="nav-item" id="nav-contact">
+    <a href="/contact" class="more-item">
       <i class="fa-solid fa-envelope"></i>
       <span>Contact</span>
     </a>
-  </nav>
+  </div>
 </body>
 </html>
+
 

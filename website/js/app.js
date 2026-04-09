@@ -61,12 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
       '/past-papers.html': 'nav-past',
       '/model-papers': 'nav-model',
       '/model-papers.html': 'nav-model',
-      '/tuition': 'nav-tuition',
-      '/tuition.html': 'nav-tuition',
-      '/online-ide': 'nav-ide',
-      '/online-ide.html': 'nav-ide',
-      '/contact': 'nav-contact',
-      '/contact.html': 'nav-contact'
+      // Grouping under More
+      '/tuition': 'nav-more',
+      '/tuition.html': 'nav-more',
+      '/online-ide': 'nav-more',
+      '/online-ide.html': 'nav-more',
+      '/contact': 'nav-more',
+      '/contact.html': 'nav-more'
     };
     
     // Highlight active tab
@@ -76,6 +77,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (el) el.classList.add('active');
       }
     });
+
+    // More Menu Toggle
+    const moreBtn = document.getElementById('nav-more');
+    const moreMenu = document.getElementById('more-menu-overlay');
+    
+    if (moreBtn && moreMenu) {
+      moreBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        moreMenu.classList.toggle('show');
+        impact('medium');
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!moreBtn.contains(e.target) && !moreMenu.contains(e.target)) {
+          moreMenu.classList.remove('show');
+        }
+      });
+    }
 
     // Haptic feedback helper
     const impact = (style = 'light') => {
