@@ -24,6 +24,7 @@ release/
 /website/node_modules/
 /node_modules/
 /telegram-bot/node_modules/
+users.json
 
 # GitHub Actions Cache
 .old_cache/
