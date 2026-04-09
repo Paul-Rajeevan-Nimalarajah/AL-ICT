@@ -55,16 +55,9 @@ bot.start((ctx) => {
   // Dense 3-Column Grid Keyboard
   const mainKeyboard = Markup.keyboard([
     ['📚 Notes', '📄 Models', '📝 Past'],
-    ['📱 Mobile App', '🌐 Website', '💻 Online IDE'],
-    ['📢 Channel', '📞 Contact', '💼 About Us']
+    ['💻 Online IDE', '📱 Mobile App', '💼 About Us'],
+    ['🌐 Visit Our Website', '📢 Join Our Telegram Channel', '📞 Contact']
   ]).resize();
-
-  // Add placeholder to the keyboard
-  const keyboardOptions = {
-    resize_keyboard: true,
-    input_field_placeholder: 'Select a category...'
-  };
-
   // Inline App Button
   const appMenu = Markup.inlineKeyboard([
     [Markup.button.webApp('📱 Open Full Hub App', websiteUrl)]
@@ -128,14 +121,14 @@ bot.hears('📱 Mobile App', (ctx) => ctx.reply('Launch the full website experie
     [Markup.button.webApp('📱 Open Hub App', websiteUrl)]
 ])));
 
-bot.hears('🌐 Website', (ctx) => ctx.reply(`Visit our website: ${websiteUrl}`));
+bot.hears('🌐 Visit Our Website', (ctx) => ctx.reply(`Visit our website: ${websiteUrl}`));
 
 bot.hears('💻 Online IDE', (ctx) => ctx.reply('Practice coding with our online IDE:', Markup.inlineKeyboard([
     [Markup.button.url('💻 Open Online IDE', `${websiteUrl}/online-ide.html`)]
 ])));
 
-bot.hears('📢 Channel', (ctx) => ctx.reply('Join our official updates channel!', Markup.inlineKeyboard([
-    [Markup.button.url('📢 Join Channel', 'https://t.me/al_ict_notes_testing')] // Update with real channel URL
+bot.hears('📢 Join Our Telegram Channel', (ctx) => ctx.reply('Join our official updates channel for the latest notes and model papers!', Markup.inlineKeyboard([
+    [Markup.button.url('📢 Join Channel', 'https://t.me/al_ict_notes_testing')] 
 ])));
 
 bot.hears('📞 Contact', (ctx) => ctx.reply('Need help? Visit our contact page or message the admin.', Markup.inlineKeyboard([
