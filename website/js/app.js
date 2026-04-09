@@ -80,13 +80,34 @@ document.addEventListener('DOMContentLoaded', () => {
       tg.BackButton.hide();
     }
 
+    // Active state for bottom nav
+    const path = window.location.pathname;
+    const navItems = {
+      '/': 'nav-home',
+      '/index.html': 'nav-home',
+      '/notes': 'nav-notes',
+      '/notes.html': 'nav-notes',
+      '/past-papers': 'nav-past',
+      '/past-papers.html': 'nav-past',
+      '/model-papers': 'nav-model',
+      '/model-papers.html': 'nav-model',
+      '/online-ide': 'nav-ide',
+      '/online-ide.html': 'nav-ide'
+    };
+    
+    const activeId = navItems[path];
+    if (activeId) {
+      const activeEl = document.getElementById(activeId);
+      if (activeEl) activeEl.classList.add('active');
+    }
+
     // Haptic feedback helper
     const impact = (style = 'medium') => {
       if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred(style);
     }
 
-    // Add haptics to all buttons
-    document.querySelectorAll('.btn, .pdf-toggle-btn').forEach(btn => {
+    // Add haptics to all buttons and nav items
+    document.querySelectorAll('.btn, .pdf-toggle-btn, .nav-item').forEach(btn => {
       btn.addEventListener('click', () => impact('light'));
     });
   }
