@@ -44,7 +44,7 @@ const getMaterials = async () => {
 // --- Bot Commands ---
 
 // Start command
-bot.start((ctx) => {
+bot.start(async (ctx) => {
   saveUser(ctx);
   
   const welcomeMessage = `Welcome to the *AL ICT Hub* 🎓\n\nChoose an option from the menu below to get started.`;
@@ -60,16 +60,10 @@ bot.start((ctx) => {
     [Markup.button.webApp('📱 Open Full Hub App', websiteUrl)]
   ]);
 
-  ctx.replyWithMarkdown(welcomeMessage, {
-    reply_markup: {
-      keyboard: mainKeyboard.reply_markup.keyboard,
-      resize_keyboard: true,
-      input_field_placeholder: 'Choose a category...'
-    }
-  });
+  await ctx.replyWithMarkdown(welcomeMessage, mainKeyboard);
 
-  // Second message for the Inline App Button
-  ctx.reply('🚀 Launch the full App experience:', appMenu);
+  // Send the app button as a separate follow-up
+  await ctx.reply('🚀 Launch the full App experience:', appMenu);
 });
 
 // Broadcast to Users
