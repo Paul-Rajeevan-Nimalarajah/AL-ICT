@@ -43,28 +43,35 @@ const showMaterials = async (ctx) => {
     
     const data = await response.json();
     
-    let message = '📚 *Study Materials Available*\n\n';
-    
-    if (data.notes && data.notes.length > 0) {
-      message += '*Unit Notes:*\n';
-      // Limiting to recent 5 to avoid telegram message limit
-      data.notes.slice(0, 5).forEach(n => {
-        message += `• [${n.title}](${websiteUrl}/${n.href})\n`;
-      });
-      if (data.notes.length > 5) message += `_...and ${data.notes.length - 5} more on the site_\n`;
-      message += '\n';
-    }
-    
-    if (data.models && data.models.length > 0) {
-      message += '*Model Papers:*\n';
-      data.models.slice(0, 5).forEach(m => {
-        message += `• [${m.title}](${m.href})\n`;
-      });
-      if (data.models.length > 5) message += `_...and ${data.models.length - 5} more on the site_\n`;
-    }
+    const sendChunks = async (title, items, baseUrl = '') => {
+      if (!items || items.length === 0) return;
+      
+      let message = `📚 *${title}*\n\n`;
+      let chunks = [];
+      
+      for (const item of items) {
+        const link = item.href.startsWith('http') ? item.href : `${baseUrl}/${item.href.replace(/^\//, '')}`;
+        const line = `• [${item.title}](${link})\n`;
+        
+        if (message.length + line.length > 3900) {
+          chunks.push(message);
+          message = line;
+        } else {
+          message += line;
+        }
+      }
+      if (message.length > 0) chunks.push(message);
+      
+      for (const chunk of chunks) {
+        await ctx.replyWithMarkdown(chunk, { disable_web_page_preview: true });
+        await new Promise(r => setTimeout(r, 500)); // anti-flood
+      }
+    };
 
-    // You can customize this to just say "Go to website to see all 100+ materials"
-    await ctx.replyWithMarkdown(message, { disable_web_page_preview: true });
+    await sendChunks('Unit Notes', data.notes, websiteUrl);
+    await sendChunks('Model Papers', data.models, websiteUrl);
+    await sendChunks('Past Papers', data.pastPapers, websiteUrl);
+    
   } catch (err) {
     console.error('Failed to fetch materials:', err);
     ctx.reply(`Could not fetch the latest materials. Please visit ${websiteUrl} directly!`);
