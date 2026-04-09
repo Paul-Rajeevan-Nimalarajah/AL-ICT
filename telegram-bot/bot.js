@@ -57,7 +57,7 @@ bot.start((ctx) => {
     ['📚 Notes', '📄 Models', '📝 Past'],
     ['📱 Mobile App', '🌐 Website', '💻 Online IDE'],
     ['📢 Channel', '📞 Contact', '💼 About Us']
-  ]).resize().setLogChat(false); // setLogChat is not standard telegraf, ignoring
+  ]).resize();
 
   // Add placeholder to the keyboard
   const keyboardOptions = {
