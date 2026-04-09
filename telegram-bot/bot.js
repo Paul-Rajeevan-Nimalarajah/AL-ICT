@@ -49,17 +49,26 @@ const getMaterials = async () => {
 // Start command
 bot.start((ctx) => {
   saveUser(ctx);
-  const welcomeMessage = `Welcome to the *AL ICT Tamil Medium Notes Hub Bot*! 🎓\n\nI can help you browse study materials easily. Choose a category below:`;
   
-  ctx.replyWithMarkdown(welcomeMessage, 
-    Markup.inlineKeyboard([
-      [Markup.button.callback('📚 Unit Notes', 'menu_notes')],
-      [Markup.button.callback('📄 Model Papers', 'menu_models')],
-      [Markup.button.callback('📝 Past Papers', 'menu_past')],
-      [Markup.button.callback('💻 Online IDE', 'contact_admin'), Markup.button.url('🌐 Website', websiteUrl)],
-      [Markup.button.callback('📞 Contact Admin', 'contact_admin')]
-    ])
-  );
+  const welcomeMessage = `Welcome to the *AL ICT Tamil Medium Notes Hub*! 🎓\n\nI have been upgraded to feel like a mobile app. Use the menu below to browse, or open the Full Mobile App directly!`;
+  
+  // Persistent Bottom Keyboard
+  const mainKeyboard = Markup.keyboard([
+    ['📚 Browse Notes', '📄 Model Papers'],
+    ['📝 Past Papers', '📞 Contact Admin'],
+    ['🌐 Visit Website']
+  ]).resize();
+
+  // Inline App Button
+  const appMenu = Markup.inlineKeyboard([
+    [Markup.button.webApp('📱 Open Mobile Hub (Full App)', websiteUrl)],
+    [Markup.button.callback('🔍 Search Materials (In-Bot)', 'main_menu')]
+  ]);
+
+  ctx.replyWithMarkdown(welcomeMessage, {
+    ...mainKeyboard,
+    ...appMenu
+  });
 });
 
 // Broadcast to Users
@@ -88,6 +97,29 @@ bot.command('broadcast_users', async (ctx) => {
   }
   ctx.reply(`✅ Broadcast complete. Successfully sent to ${successCount}/${users.length} users.`);
 });
+
+// --- Reply Keyboard Handlers (App Navigation) ---
+
+bot.hears('📚 Browse Notes', (ctx) => ctx.reply('Opening Notes Menu...', Markup.inlineKeyboard([
+  [Markup.button.callback('📂 Select Unit/Category', 'menu_notes')],
+  [Markup.button.callback('⬅️ Back', 'main_menu')]
+])));
+
+bot.hears('📄 Model Papers', (ctx) => ctx.reply('Opening Model Papers...', Markup.inlineKeyboard([
+  [Markup.button.callback('📂 Select Year', 'menu_models')],
+  [Markup.button.callback('⬅️ Back', 'main_menu')]
+])));
+
+bot.hears('📝 Past Papers', (ctx) => ctx.reply('Opening Past Papers...', Markup.inlineKeyboard([
+  [Markup.button.callback('📂 Select Year', 'menu_past')],
+  [Markup.button.callback('⬅️ Back', 'main_menu')]
+])));
+
+bot.hears('📞 Contact Admin', (ctx) => ctx.reply('Need help? Visit our contact page or message the admin.', Markup.inlineKeyboard([
+    [Markup.button.url('🌐 Contact Page', `${websiteUrl}/contact.html`)]
+])));
+
+bot.hears('🌐 Visit Website', (ctx) => ctx.reply(`Visit us at: ${websiteUrl}`));
 
 // --- Navigation Handlers ---
 
