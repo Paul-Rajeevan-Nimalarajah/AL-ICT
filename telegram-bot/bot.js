@@ -156,7 +156,7 @@ bot.action('post_channel', async (ctx) => {
   if (!msg) return ctx.editMessageText('❌ Original media not found.');
 
   try {
-    const signature = '\n\n— Posted via @alictnoteshub_bot 🤖';
+    const signature = '\n\n— Posted via @alictnoteshubbot 🤖';
     await bot.telegram.copyMessage(CHANNEL_USERNAME, ctx.chat.id, msg.message_id, {
       caption: (msg.caption || '') + signature,
       parse_mode: 'Markdown'
