@@ -50,23 +50,32 @@ const getMaterials = async () => {
 bot.start((ctx) => {
   saveUser(ctx);
   
-  const welcomeMessage = `Welcome to the *AL ICT Tamil Medium Notes Hub*! 🎓\n\nI have been upgraded to feel like a mobile app. Use the menu below to browse, or open the Full Mobile App directly!`;
+  const welcomeMessage = `Welcome to the *AL ICT Hub* 🎓\n\nChoose an option from the menu below to get started.`;
   
-  // Persistent Bottom Keyboard
+  // Dense 3-Column Grid Keyboard
   const mainKeyboard = Markup.keyboard([
-    ['📚 Browse Notes', '📄 Model Papers'],
-    ['📝 Past Papers', '📞 Contact Admin'],
-    ['🌐 Visit Website']
-  ]).resize();
+    ['📚 Notes', '📄 Models', '📝 Past'],
+    ['📱 Mobile App', '🌐 Website', '💻 Online IDE'],
+    ['📢 Channel', '📞 Contact', '💼 About Us']
+  ]).resize().setLogChat(false); // setLogChat is not standard telegraf, ignoring
+
+  // Add placeholder to the keyboard
+  const keyboardOptions = {
+    resize_keyboard: true,
+    input_field_placeholder: 'Select a category...'
+  };
 
   // Inline App Button
   const appMenu = Markup.inlineKeyboard([
-    [Markup.button.webApp('📱 Open Mobile Hub (Full App)', websiteUrl)],
-    [Markup.button.callback('🔍 Search Materials (In-Bot)', 'main_menu')]
+    [Markup.button.webApp('📱 Open Full Hub App', websiteUrl)]
   ]);
 
   ctx.replyWithMarkdown(welcomeMessage, {
-    ...mainKeyboard,
+    reply_markup: {
+      keyboard: mainKeyboard.reply_markup.keyboard,
+      resize_keyboard: true,
+      input_field_placeholder: 'Choose a category...'
+    },
     ...appMenu
   });
 });
@@ -98,28 +107,42 @@ bot.command('broadcast_users', async (ctx) => {
   ctx.reply(`✅ Broadcast complete. Successfully sent to ${successCount}/${users.length} users.`);
 });
 
-// --- Reply Keyboard Handlers (App Navigation) ---
+// --- Reply Keyboard Handlers (3-Column Grid) ---
 
-bot.hears('📚 Browse Notes', (ctx) => ctx.reply('Opening Notes Menu...', Markup.inlineKeyboard([
+bot.hears('📚 Notes', (ctx) => ctx.reply('📚 Unit Notes Categories:', Markup.inlineKeyboard([
   [Markup.button.callback('📂 Select Unit/Category', 'menu_notes')],
   [Markup.button.callback('⬅️ Back', 'main_menu')]
 ])));
 
-bot.hears('📄 Model Papers', (ctx) => ctx.reply('Opening Model Papers...', Markup.inlineKeyboard([
+bot.hears('📄 Models', (ctx) => ctx.reply('📄 Model Papers Categories:', Markup.inlineKeyboard([
   [Markup.button.callback('📂 Select Year', 'menu_models')],
   [Markup.button.callback('⬅️ Back', 'main_menu')]
 ])));
 
-bot.hears('📝 Past Papers', (ctx) => ctx.reply('Opening Past Papers...', Markup.inlineKeyboard([
+bot.hears('📝 Past', (ctx) => ctx.reply('📝 Past Papers Categories:', Markup.inlineKeyboard([
   [Markup.button.callback('📂 Select Year', 'menu_past')],
   [Markup.button.callback('⬅️ Back', 'main_menu')]
 ])));
 
-bot.hears('📞 Contact Admin', (ctx) => ctx.reply('Need help? Visit our contact page or message the admin.', Markup.inlineKeyboard([
+bot.hears('📱 Mobile App', (ctx) => ctx.reply('Launch the full website experience inside Telegram:', Markup.inlineKeyboard([
+    [Markup.button.webApp('📱 Open Hub App', websiteUrl)]
+])));
+
+bot.hears('🌐 Website', (ctx) => ctx.reply(`Visit our website: ${websiteUrl}`));
+
+bot.hears('💻 Online IDE', (ctx) => ctx.reply('Practice coding with our online IDE:', Markup.inlineKeyboard([
+    [Markup.button.url('💻 Open Online IDE', `${websiteUrl}/online-ide.html`)]
+])));
+
+bot.hears('📢 Channel', (ctx) => ctx.reply('Join our official updates channel!', Markup.inlineKeyboard([
+    [Markup.button.url('📢 Join Channel', 'https://t.me/al_ict_notes_testing')] // Update with real channel URL
+])));
+
+bot.hears('📞 Contact', (ctx) => ctx.reply('Need help? Visit our contact page or message the admin.', Markup.inlineKeyboard([
     [Markup.button.url('🌐 Contact Page', `${websiteUrl}/contact.html`)]
 ])));
 
-bot.hears('🌐 Visit Website', (ctx) => ctx.reply(`Visit us at: ${websiteUrl}`));
+bot.hears('💼 About Us', (ctx) => ctx.reply('AL ICT Notes Hub is a dedicated platform for Tamil Medium students. Visit our site to learn more!'));
 
 // --- Navigation Handlers ---
 
