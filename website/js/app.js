@@ -91,8 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
       '/past-papers.html': 'nav-past',
       '/model-papers': 'nav-model',
       '/model-papers.html': 'nav-model',
+      '/tuition': 'nav-tuition',
+      '/tuition.html': 'nav-tuition',
       '/online-ide': 'nav-ide',
-      '/online-ide.html': 'nav-ide'
+      '/online-ide.html': 'nav-ide',
+      '/contact': 'nav-contact',
+      '/contact.html': 'nav-contact'
     };
     
     const activeId = navItems[path];
