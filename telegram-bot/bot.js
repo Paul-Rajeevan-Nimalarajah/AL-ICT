@@ -65,9 +65,11 @@ bot.start((ctx) => {
       keyboard: mainKeyboard.reply_markup.keyboard,
       resize_keyboard: true,
       input_field_placeholder: 'Choose a category...'
-    },
-    ...appMenu
+    }
   });
+
+  // Second message for the Inline App Button
+  ctx.reply('🚀 Launch the full App experience:', appMenu);
 });
 
 // Broadcast to Users
