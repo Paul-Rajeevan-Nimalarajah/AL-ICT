@@ -63,10 +63,9 @@ bot.start(async (ctx) => {
       Markup.button.url('📢 Join Channel', 'https://t.me/alictnoteshub')
     ],
     [
-      Markup.button.url('💻 Online IDE', `${websiteUrl}/online-ide.html`),
-      Markup.button.callback('💬 Contact Admin', 'contact_admin_chat')
+      Markup.button.url('💻 Online IDE', `${websiteUrl}/online-ide`)
     ],
-    [Markup.button.url('📞 Web Contact Form', 'https://alict.paulrajeevan.com/contact.html')]
+    [Markup.button.url('📞 Contact Admin', 'https://alict.paulrajeevan.com/contact')]
   ]);
 
   await ctx.replyWithMarkdown(welcomeMessage, Markup.removeKeyboard());
@@ -142,21 +141,11 @@ bot.action('main_menu', async (ctx) => {
         Markup.button.url('📢 Channel', 'https://t.me/alictnoteshub')
       ],
       [
-        Markup.button.url('💻 Online IDE', `${websiteUrl}/online-ide.html`),
-        Markup.button.callback('💬 Contact Admin', 'contact_admin_chat')
-      ]
+        Markup.button.url('💻 Online IDE', `${websiteUrl}/online-ide`)
+      ],
+      [Markup.button.url('📞 Contact Admin', 'https://alict.paulrajeevan.com/contact')]
     ])
   });
-});
-
-bot.action('contact_admin_chat', (ctx) => {
-  ctx.answerCbQuery();
-  ctx.reply('👇 Just type your message directly into this chat! It will be instantly forwarded securely to the Admin, and their reply will appear right here.');
-});
-
-bot.action('contact_admin', (ctx) => {
-  ctx.answerCbQuery();
-  ctx.reply('To directly reach out, visit: https://alict.paulrajeevan.com/contact.html or message the admin.');
 });
 
 // Media Action Handlers
@@ -205,86 +194,6 @@ bot.action('post_users', async (ctx) => {
 bot.action('cancel_post', (ctx) => {
   ctx.editMessageText('❌ Post cancelled.');
 });
-// --- Direct Two-Way Contact Logic ---
-
-// Manual Reply Command for Admin Fallback
-bot.command('reply', async (ctx) => {
-  if (!isAdmin(ctx)) return;
-  const args = ctx.message.text.split(' ');
-  if (args.length < 3) return ctx.reply('Usage: `/reply [USER_ID] [Message...]`', { parse_mode: 'Markdown' });
-
-  const userId = args[1];
-  const messageText = args.slice(2).join(' ');
-
-  try {
-    await bot.telegram.sendMessage(userId, `💬 *Admin Replied:*\n\n${messageText}`, { parse_mode: 'Markdown' });
-    ctx.reply('✅ Reply sent successfully to user.');
-  } catch (e) {
-    ctx.reply(`❌ Failed to send reply: ${e.message}`);
-  }
-});
-
-// Generic Message Handler for User -> Admin and Admin -> User (Reply)
-bot.on('message', async (ctx, next) => {
-  // If it's a command, let standard command handlers run instead
-  if (ctx.message.text && ctx.message.text.startsWith('/')) return next();
-
-  if (isAdmin(ctx)) {
-    // Check if Admin is explicitly replying to a forwarded message
-    if (ctx.message.reply_to_message) {
-      const repliedTo = ctx.message.reply_to_message;
-      let targetUserId = null;
-
-      // Extract user ID natively if forward_from is available
-      if (repliedTo.forward_from) {
-        targetUserId = repliedTo.forward_from.id;
-      } else if (repliedTo.text || repliedTo.caption) {
-        // Fallback: Extract from our custom meta-alert if privacy settings hid the forward
-        const text = repliedTo.text || repliedTo.caption;
-        const match = text.match(/ID:\s*`?(\d+)`?/);
-        if (match) targetUserId = match[1];
-      }
-
-      if (targetUserId) {
-        try {
-          await bot.telegram.copyMessage(targetUserId, ctx.chat.id, ctx.message.message_id);
-          await ctx.reply('✅ Reply copied to user.');
-        } catch (e) {
-          await ctx.reply(`❌ Failed to send reply: ${e.message}\nTry /reply ${targetUserId} message`);
-        }
-        return; // Handled as a reply
-      }
-    }
-    // If Admin sends media or text WITHOUT replying, let other handlers (like media broadcast) handle it
-    return next(); 
-  } else {
-    // Normal User sending a direct message -> Forward to Admin
-    saveUser(ctx); // Ensure user is tracked
-
-    if (!ADMIN_ID) {
-      return ctx.reply('⚠️ Admin contact is not configured currently.');
-    }
-
-    try {
-      // Forward the exact message (supports photos, docs, stickers)
-      const forwardedMsg = await ctx.forwardMessage(ADMIN_ID);
-      
-      // Send metadata alert so Admin can reply or see their ID if hidden
-      let metaText = `💬 *Incoming Message*\nFrom: [${ctx.from.first_name || 'User'}](tg://user?id=${ctx.from.id})\nID: \`${ctx.from.id}\`\n\n_Reply directly to the forwarded message above to answer. If Telegram blocks the reply, use:_\n\`/reply ${ctx.from.id} your message\``;
-      
-      await bot.telegram.sendMessage(ADMIN_ID, metaText, { 
-        parse_mode: 'Markdown',
-        reply_to_message_id: forwardedMsg.message_id 
-      });
-
-      await ctx.reply('✅ Your message has been sent to the admin. You will receive a reply here shortly.');
-    } catch (e) {
-      console.error('Forward failed', e);
-      ctx.reply(`❌ Could not send the message at this time.`);
-    }
-  }
-});
-
 // Launch logic
 if (process.env.VERCEL) {
   console.log('🌐 Webhook mode active');
