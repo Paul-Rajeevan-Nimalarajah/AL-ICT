@@ -641,6 +641,26 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
 
+.wa-btn-channel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  background: white;
+  color: #25d366;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+.wa-btn-channel:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
 .tg-btn-bot {
   display: inline-flex;
   align-items: center;
@@ -662,3 +682,4 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
   border-color: white;
   transform: translateY(-3px);
 }
+
