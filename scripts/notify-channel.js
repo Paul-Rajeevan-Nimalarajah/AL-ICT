@@ -77,9 +77,11 @@ const main = async () => {
 
         console.log(`Comparing items: ${oldItems.length} old vs ${newItems.length} new.`);
 
-        const oldUrls = new Set(oldItems.map(i => i.href));
-
-        const newlyAdded = newItems.filter(item => !oldUrls.has(item.href));
+        const newlyAdded = newItems.filter(item => {
+            const oldItem = oldItems.find(oi => oi.href === item.href);
+            // Notify if item is new or if its group has changed (e.g. from Other to Unit 9)
+            return !oldItem || oldItem.group !== item.group;
+        });
 
         console.log(`Found ${newlyAdded.length} new materials to notify.`);
 
