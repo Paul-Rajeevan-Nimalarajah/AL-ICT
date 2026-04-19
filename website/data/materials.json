@@ -1,6 +1,10 @@
 {
   "notesGroups": [
-    "Other"
+    "Teacher's Guides & Resource Books",
+    "Unit 5",
+    "Unit 8",
+    "Unit 9",
+    "e-Kalvi"
   ],
   "modelsGroups": [
     "2026",
@@ -37,82 +41,82 @@
     {
       "title": "Grade 12 – ICT Teacher's Guide - Download",
       "href": "assets/pdfs/Teacher's%20guide%20and%20Resource%20book/grade_12_information_and_communication_technology_ict_teacher_guide.pdf",
-      "group": "Other"
+      "group": "Teacher's Guides & Resource Books"
     },
     {
       "title": "Grade 13 – ICT Teacher's Guide - Download",
       "href": "assets/pdfs/Teacher's%20guide%20and%20Resource%20book/grade_13_information_and_communication_technology_ict_teacher_guide.pdf",
-      "group": "Other"
+      "group": "Teacher's Guides & Resource Books"
     },
     {
       "title": "Grade 13 – ICT Resource Book - Download",
       "href": "assets/pdfs/Teacher's%20guide%20and%20Resource%20book/Grade%2013%20ICT%20Resource%20book.pdf",
-      "group": "Other"
+      "group": "Teacher's Guides & Resource Books"
     },
     {
       "title": "A/L ICT – Introduction to Operating System - Download",
       "href": "assets/pdfs/notes/unit-5-operating-system/Introduction_to_Operating_System_PaulRajeevan.pdf",
-      "group": "Other"
+      "group": "Unit 5"
     },
     {
       "title": "A/L ICT – OS Tree - Download",
       "href": "assets/pdfs/notes/unit-5-operating-system/OS_Tree_PaulRajeevan.pdf",
-      "group": "Other"
+      "group": "Unit 5"
     },
     {
       "title": "A/L ICT – Basics of Information, Data & Databases - Download",
       "href": "assets/pdfs/notes/unit-8-database-management/basics_of_%20information_data_and_databases_PaulRajeevan.pdf",
-      "group": "Other"
+      "group": "Unit 8"
     },
     {
       "title": "A/L ICT – ER Diagram (Entity Relationship Diagram) - Download",
       "href": "assets/pdfs/notes/unit-8-database-management/ER_Diagram_PaulRajeevan.pdf",
-      "group": "Other"
+      "group": "Unit 8"
     },
     {
       "title": "A/L ICT – Python Grade Calculator Program - Download",
       "href": "assets/pdfs/notes/unit-9-programming/python_grade_calculator_program_PaulRajeevan.pdf",
-      "group": "Other"
+      "group": "Unit 9"
     },
     {
       "title": "A/L ICT – Python - Download",
       "href": "https://drive.google.com/uc?export=download&id=1APlmTdmNRKuja4ell6TfMSyTdQ3imA0A",
-      "group": "Other"
+      "group": "e-Kalvi"
     },
     {
       "title": "A/L ICT – Computer System - Download",
       "href": "https://drive.google.com/uc?export=download&id=1m-pGEOJZs-adpF2yB4zIJMg1R_tXcPnb",
-      "group": "Other"
+      "group": "e-Kalvi"
     },
     {
       "title": "A/L ICT – Data Communication and Network - Download",
       "href": "https://drive.google.com/uc?export=download&id=1cgnazpFxalT5ercHNqSBPVnZPuCuPOx5",
-      "group": "Other"
+      "group": "e-Kalvi"
     },
     {
       "title": "A/L ICT – Database Management System - Download",
       "href": "https://drive.google.com/uc?export=download&id=18a69A1oC7RH7NF9N3tdwNUwbijiMX4mh",
-      "group": "Other"
+      "group": "e-Kalvi"
     },
     {
       "title": "A/L ICT – Operating System - Download",
       "href": "https://drive.google.com/uc?export=download&id=1RSMgin_1eGMwA_gjHdsviUtU041Yg_PR",
-      "group": "Other"
+      "group": "e-Kalvi"
     },
     {
       "title": "A/L ICT – Internet of Things - Download",
       "href": "https://drive.google.com/uc?export=download&id=1Il_QOOzBcCSdaxVuhFr6gHaB0CxyPnfR",
-      "group": "Other"
+      "group": "e-Kalvi"
     },
     {
       "title": "A/L ICT – E-Commerce - Download",
       "href": "https://drive.google.com/uc?export=download&id=1wjI-4cXTGiy6z6JLShzoai1PWUKKvKt5",
-      "group": "Other"
+      "group": "e-Kalvi"
     },
     {
       "title": "A/L ICT – Web Development - Download",
       "href": "https://drive.google.com/uc?export=download&id=1UXx9nV9Qw6oKTa9VSCHbP_3x2jN2O4Gi",
-      "group": "Other"
+      "group": "e-Kalvi"
     }
   ],
   "models": [

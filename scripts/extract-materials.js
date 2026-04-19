@@ -16,17 +16,21 @@ const extractMaterials = (filePath) => {
           title = cardTitle ? `${cardTitle} - ${title.replace('Download ', '')}` : title;
       }
 
-      // Determine category (Unit or Year)
+      // Determine category (Unit or Year) from section title or link title
       let group = 'Other';
-      const yearMatch = title.match(/(20\d{2})/);
-      const unitMatch = title.match(/Unit\s*(\d+)/i);
+      const sectionHeader = $(el).closest('article.card').find('h2').first().text().trim();
       
-      if (yearMatch) {
-          group = yearMatch[1];
-      } else if (unitMatch) {
+      const yearMatch = title.match(/(20\d{2})/) || sectionHeader.match(/(20\d{2})/);
+      const unitMatch = title.match(/Unit\s*(\d+)/i) || sectionHeader.match(/Unit\s*(\d+)/i);
+      
+      if (unitMatch) {
           group = `Unit ${unitMatch[1]}`;
-      } else if (title.toLowerCase().includes('e-kalvi')) {
+      } else if (yearMatch) {
+          group = yearMatch[1];
+      } else if (sectionHeader.toLowerCase().includes('e-kalvi') || title.toLowerCase().includes('e-kalvi')) {
           group = 'e-Kalvi';
+      } else if (sectionHeader) {
+          group = sectionHeader.split('–')[0].split('-')[0].trim(); // Extract first part of header
       }
 
       links.push({ title, href, group });

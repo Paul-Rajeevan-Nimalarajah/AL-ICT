@@ -9,11 +9,23 @@ if (!botToken || !channelUsername) {
   process.exit(0);
 }
 
+const escapeHTML = (str) => str.replace(/[&<>"']/g, (m) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+})[m]);
+
 const sendNotification = async (material, category) => {
   const websiteUrl = 'https://alict.paulrajeevan.com';
   const urlLink = material.href.startsWith('http') ? material.href : `${websiteUrl}/${material.href.replace(/^\//, '')}`;
   
-  const message = `🎉 *New Study Material Added!*\n\n*Category:* ${category}\n*Title:* ${material.title}\n\n👉 [Click here to view/download](${urlLink})\n\n— Posted via @alictnoteshubbot 🤖`;
+  const message = `🎉 <b>New Study Material Added!</b>\n\n` +
+                  `<b>Category:</b> ${escapeHTML(category)}\n` +
+                  `<b>Title:</b> ${escapeHTML(material.title)}\n\n` +
+                  `👉 <a href="${urlLink}">Click here to view/download</a>\n\n` +
+                  `— Posted via @alictnoteshubbot 🤖`;
   
   const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
   
@@ -24,18 +36,21 @@ const sendNotification = async (material, category) => {
       body: JSON.stringify({
         chat_id: channelUsername,
         text: message,
-        parse_mode: 'Markdown',
+        parse_mode: 'HTML',
         disable_web_page_preview: true
       })
     });
     
+    const responseText = await res.text();
     if (!res.ok) {
-        console.error('Failed to send message:', await res.text());
+        console.error('Failed to send message:', responseText);
+        throw new Error(`Telegram API Error: ${responseText}`);
     } else {
         console.log(`Successfully notified channel about: ${material.title}`);
     }
   } catch (err) {
-    console.error('Network error while notifying channel:', err);
+    console.error('Error while notifying channel:', err.message);
+    throw err; // Re-throw to trigger process.exit(1) in main()
   }
 };
 
