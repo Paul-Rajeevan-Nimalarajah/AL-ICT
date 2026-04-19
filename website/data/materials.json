@@ -35,6 +35,21 @@
   ],
   "notes": [
     {
+      "title": "Grade 12 – ICT Teacher's Guide - Download",
+      "href": "assets/pdfs/Teacher's%20guide%20and%20Resource%20book/grade_12_information_and_communication_technology_ict_teacher_guide.pdf",
+      "group": "Other"
+    },
+    {
+      "title": "Grade 13 – ICT Teacher's Guide - Download",
+      "href": "assets/pdfs/Teacher's%20guide%20and%20Resource%20book/grade_13_information_and_communication_technology_ict_teacher_guide.pdf",
+      "group": "Other"
+    },
+    {
+      "title": "Grade 13 – ICT Resource Book - Download",
+      "href": "assets/pdfs/Teacher's%20guide%20and%20Resource%20book/Grade%2013%20ICT%20Resource%20book.pdf",
+      "group": "Other"
+    },
+    {
       "title": "A/L ICT – Introduction to Operating System - Download",
       "href": "assets/pdfs/notes/unit-5-operating-system/Introduction_to_Operating_System_PaulRajeevan.pdf",
       "group": "Other"
@@ -52,6 +67,11 @@
     {
       "title": "A/L ICT – ER Diagram (Entity Relationship Diagram) - Download",
       "href": "assets/pdfs/notes/unit-8-database-management/ER_Diagram_PaulRajeevan.pdf",
+      "group": "Other"
+    },
+    {
+      "title": "A/L ICT – Python Grade Calculator Program - Download",
+      "href": "assets/pdfs/notes/unit-9-programming/python_grade_calculator_program_PaulRajeevan.pdf",
       "group": "Other"
     },
     {
