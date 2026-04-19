@@ -5,9 +5,20 @@ const botToken = process.env.BOT_TOKEN;
 const channelUsername = process.env.CHANNEL_USERNAME;
 
 if (!botToken || !channelUsername) {
+  console.log('--- DIAGNOSTICS ---');
+  console.log('BOT_TOKEN exists:', !!botToken);
+  console.log('CHANNEL_USERNAME exists:', !!channelUsername);
+  console.log('-------------------');
   console.log('BOT_TOKEN or CHANNEL_USERNAME not set. Skipping notifications.');
   process.exit(0);
 }
+
+console.log('--- DIAGNOSTICS ---');
+console.log('BOT_TOKEN length:', botToken.length);
+console.log('BOT_TOKEN format (prefix):', botToken.substring(0, 5) + '...');
+console.log('BOT_TOKEN valid format (contains \':\'):', botToken.includes(':'));
+console.log('CHANNEL_USERNAME:', channelUsername);
+console.log('-------------------');
 
 const escapeHTML = (str) => str.replace(/[&<>"']/g, (m) => ({
     '&': '&amp;',

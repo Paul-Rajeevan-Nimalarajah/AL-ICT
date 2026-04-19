@@ -27,6 +27,14 @@ jobs:
       - name: Install Dependencies
         run: npm install cheerio dotenv
         
+      - name: Debug Secrets (Check presence)
+        env:
+          BT: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CU: ${{ secrets.TELEGRAM_CHANNEL_USERNAME }}
+        run: |
+          if [ -z "$BT" ]; then echo "❌ TELEGRAM_BOT_TOKEN is missing"; else echo "✅ TELEGRAM_BOT_TOKEN is present (length: ${#BT})"; fi
+          if [ -z "$CU" ]; then echo "❌ TELEGRAM_CHANNEL_USERNAME is missing"; else echo "✅ TELEGRAM_CHANNEL_USERNAME is present (length: ${#CU})"; fi
+        
       - name: Save Previous Materials state
         run: |
           mkdir -p .old_cache
