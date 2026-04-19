@@ -25,7 +25,7 @@ jobs:
           node-version: '20'
           
       - name: Install Dependencies
-        run: npm install cheerio node-fetch dotenv
+        run: npm install cheerio dotenv
         
       - name: Save Previous Materials state
         run: |

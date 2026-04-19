@@ -1,5 +1,5 @@
 const fs = require('fs');
-const fetch = require('node-fetch');
+// Native fetch is available in Node 18+
 
 const botToken = process.env.BOT_TOKEN;
 const channelUsername = process.env.CHANNEL_USERNAME;
