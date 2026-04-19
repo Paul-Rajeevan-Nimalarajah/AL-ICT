@@ -55,8 +55,12 @@ const main = async () => {
         const oldData = fs.existsSync(oldDataPath) ? JSON.parse(fs.readFileSync(oldDataPath, 'utf8')) : {};
         const newData = fs.existsSync(newDataPath) ? JSON.parse(fs.readFileSync(newDataPath, 'utf8')) : {};
 
+        console.log('Successfully parsed old and new materials data.');
+        
         const oldItems = getItems(oldData);
         const newItems = getItems(newData);
+
+        console.log(`Comparing items: ${oldItems.length} old vs ${newItems.length} new.`);
 
         const oldUrls = new Set(oldItems.map(i => i.href));
 
