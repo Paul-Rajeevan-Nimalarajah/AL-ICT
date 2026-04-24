@@ -91,7 +91,7 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
 
 /* Layout Utilities */
 .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
-.section { padding: clamp(3rem, 10vw, 5rem) 0; }
+.section { padding-top: clamp(3rem, 10vw, 5rem); padding-bottom: clamp(3rem, 10vw, 5rem); }
 .flex { display: flex; }
 .flex-col { display: flex; flex-direction: column; }
 .items-center { align-items: center; }
@@ -211,7 +211,8 @@ img { max-width: 100%; height: auto; display: block; border-radius: var(--radius
 /* Hero Section */
 .hero {
   position: relative;
-  padding: clamp(4rem, 15vw, 8rem) 0 clamp(3rem, 10vw, 6rem);
+  padding-top: clamp(4rem, 15vw, 8rem);
+  padding-bottom: clamp(3rem, 10vw, 6rem);
   overflow: hidden;
   text-align: center;
 }

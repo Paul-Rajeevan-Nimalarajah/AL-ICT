@@ -8,6 +8,8 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
@@ -112,6 +114,29 @@ class MainActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
                 progressBar.visibility = View.GONE
             }
+
+            override fun onReceivedError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                error: WebResourceError?
+            ) {
+                super.onReceivedError(view, request, error)
+                if (request?.isForMainFrame == true) {
+                    val failingUrl = request.url.toString()
+                    showOfflinePage(view, failingUrl)
+                }
+            }
+
+            @Deprecated("Deprecated in Java", ReplaceWith("onReceivedError(view, request, error)"))
+            override fun onReceivedError(
+                view: WebView?,
+                errorCode: Int,
+                description: String?,
+                failingUrl: String?
+            ) {
+                super.onReceivedError(view, errorCode, description, failingUrl)
+                showOfflinePage(view, failingUrl ?: TARGET_URL)
+            }
         }
 
         // Handle JS dialogs and progress updates
@@ -121,6 +146,7 @@ class MainActivity : AppCompatActivity() {
                     progressBar.visibility = View.GONE
                 } else {
                     progressBar.visibility = View.VISIBLE
+                    progressBar.progress = newProgress
                 }
             }
         }
@@ -164,5 +190,31 @@ class MainActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun showOfflinePage(view: WebView?, failingUrl: String) {
+        val htmlData = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #f9fafb; color: #1f2937; text-align: center; padding: 20px; box-sizing: border-box; }
+                    .icon { font-size: 64px; margin-bottom: 16px; color: #9ca3af; }
+                    h1 { font-size: 24px; margin-bottom: 8px; }
+                    p { font-size: 16px; color: #6b7280; margin-bottom: 24px; line-height: 1.5; }
+                    .btn { background-color: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 600; outline: none; }
+                    .btn:active { background-color: #1d4ed8; }
+                </style>
+            </head>
+            <body>
+                <div class="icon">📡</div>
+                <h1>No Internet Connection</h1>
+                <p>It looks like you're offline. Please check your network connection and try again.</p>
+                <button onclick="window.location.reload();" class="btn">Retry Connection</button>
+            </body>
+            </html>
+        """.trimIndent()
+        view?.loadDataWithBaseURL(failingUrl, htmlData, "text/html", "UTF-8", failingUrl)
     }
 }

@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     '/model-papers': 'nav-model',
     '/model-papers.html': 'nav-model',
     // Grouping under More
+    '/about': 'nav-more',
+    '/about.html': 'nav-more',
     '/tuition': 'nav-more',
     '/tuition.html': 'nav-more',
     '/online-ide': 'nav-more',
