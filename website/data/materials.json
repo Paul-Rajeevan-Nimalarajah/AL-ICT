@@ -1,6 +1,7 @@
 {
   "notesGroups": [
     "Teacher's Guides & Resource Books",
+    "Unit 4",
     "Unit 5",
     "Unit 8",
     "Unit 9",
@@ -52,6 +53,11 @@
       "title": "Grade 13 – ICT Resource Book - Download",
       "href": "assets/pdfs/Teacher's%20guide%20and%20Resource%20book/Grade%2013%20ICT%20Resource%20book.pdf",
       "group": "Teacher's Guides & Resource Books"
+    },
+    {
+      "title": "A/L ICT – Combinational and Sequential Logic Circuits - Download",
+      "href": "assets/pdfs/notes/unit-4-Fundamental-of-Digital-Circuits/combinational_and_sequential_logic_circuits_PaulRajeevan.pdf",
+      "group": "Unit 4"
     },
     {
       "title": "A/L ICT – Introduction to Operating System - Download",
