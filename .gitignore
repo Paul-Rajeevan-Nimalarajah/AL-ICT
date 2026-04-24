@@ -13,6 +13,7 @@
 /android-app/.idea/
 /android-app/*.iml
 /android-app/app/*.iml
+/android-app/build_*.txt
 *.apk
 *.aab
 *.aar

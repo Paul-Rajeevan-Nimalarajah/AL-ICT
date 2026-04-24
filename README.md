@@ -21,8 +21,11 @@
   - `index.html`: Home page and main navigation.
   - `notes.html`, `past-papers.html`, `model-papers.html`: Resource dedicated pages.
   - `tuition.html`: Tuition advertisement directory.
+  - `online-ide.html`: Built-in code editor for practicing programming.
+  - `about.html`: Information about the platform and its mission.
   - `contact.html`: Dynamic contact page with support for GitHub/LinkedIn links and Google Forms integration.
 - `/android-app`: An Android application (WebView wrapper) for accessing the hub on mobile devices.
+- `/telegram-bot`: A Telegram bot for managing notifications and community engagement.
 
 ## 🛠️ Tech Stack
 
