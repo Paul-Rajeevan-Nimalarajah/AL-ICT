@@ -1,21 +1,25 @@
 package com.ictnotes.hub
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
+import android.webkit.*
 import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.setPadding
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         setupWebView()
         webView.loadUrl(TARGET_URL)
+        checkForUpdates()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -54,6 +59,13 @@ class MainActivity : AppCompatActivity() {
         settings.databaseEnabled = true
         settings.useWideViewPort = true
         settings.loadWithOverviewMode = true
+
+        // Cache Management: Fetch from network when online, use cache when offline
+        if (isNetworkAvailable()) {
+            settings.cacheMode = WebSettings.LOAD_DEFAULT
+        } else {
+            settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+        }
 
         // Use WebClient to handle loading rules
         webView.webViewClient = object : WebViewClient() {
@@ -203,8 +215,8 @@ class MainActivity : AppCompatActivity() {
                     .icon { font-size: 64px; margin-bottom: 16px; color: #9ca3af; }
                     h1 { font-size: 24px; margin-bottom: 8px; }
                     p { font-size: 16px; color: #6b7280; margin-bottom: 24px; line-height: 1.5; }
-                    .btn { background-color: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 600; outline: none; }
-                    .btn:active { background-color: #1d4ed8; }
+                    .btn { background-color: #8D153A; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 600; outline: none; }
+                    .btn:active { background-color: #630C26; }
                 </style>
             </head>
             <body>
@@ -216,5 +228,67 @@ class MainActivity : AppCompatActivity() {
             </html>
         """.trimIndent()
         view?.loadDataWithBaseURL(failingUrl, htmlData, "text/html", "UTF-8", failingUrl)
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+    }
+
+    private fun checkForUpdates() {
+        thread {
+            try {
+                val url = URL("https://alict.paulrajeevan.com/version.json")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "GET"
+                connection.connect()
+
+                if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                    val content = connection.inputStream.bufferedReader().use { it.readText() }
+                    val json = JSONObject(content)
+                    val latestVersion = json.getString("latestVersion")
+                    val latestVersionCode = json.getInt("latestVersionCode")
+                    val downloadUrl = json.getString("url")
+                    val releaseNotes = json.optString("releaseNotes", "New version available!")
+
+                    // Get current version
+                    val packageInfo = packageManager.getPackageInfo(packageName, 0)
+                    val currentVersionCode = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                        packageInfo.longVersionCode.toInt()
+                    } else {
+                        @Suppress("DEPRECATION")
+                        packageInfo.versionCode
+                    }
+
+                    if (latestVersionCode > currentVersionCode) {
+                        runOnUiThread {
+                            showUpdateDialog(latestVersion, downloadUrl, releaseNotes)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun showUpdateDialog(version: String, downloadUrl: String, notes: String) {
+        AlertDialog.Builder(this)
+            .setTitle("Update Available ($version)")
+            .setMessage(notes)
+            .setPositiveButton("Update Now") { _, _ ->
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl))
+                startActivity(intent)
+            }
+            .setNegativeButton("Later", null)
+            .setCancelable(true)
+            .show()
     }
 }
